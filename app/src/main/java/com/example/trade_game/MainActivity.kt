@@ -7,10 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -21,7 +19,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.navigation.AppNavigation
 import com.example.trade_game.ui.theme.Trade_gameTheme
-import java.util.prefs.Preferences
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -44,9 +41,9 @@ fun Main() {
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
 
-    val isRegisteredState = preferencesManager.isRegistered.collectAsState(initial = null)
+    val accessTokenState = preferencesManager.getAccessToken.collectAsState(initial = null)
 
-    when (val isRegistered = isRegisteredState.value) {
+    when (val accessToken = accessTokenState.value) {
         null -> {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
@@ -54,7 +51,7 @@ fun Main() {
         }
 
         else -> {
-            val startDestination = if (isRegistered) "MainScreen" else "LoginScreen"
+            val startDestination = if (accessToken.isBlank()) "MainScreen" else "LoginScreen"
             AppNavigation(navController, startDestination)
         }
     }
