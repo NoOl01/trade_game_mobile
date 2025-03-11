@@ -1,5 +1,6 @@
 package com.example.trade_game.presenter
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -23,13 +25,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.MainViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
@@ -37,11 +42,13 @@ fun LoginView(navController: NavController, viewModel: MainViewModel = viewModel
     val limit = 30
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var popUpActive by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
     val scope = rememberCoroutineScope()
-    val response by viewModel.auth.collectAsState()
+
+    val result = viewModel.auth.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -82,11 +89,15 @@ fun LoginView(navController: NavController, viewModel: MainViewModel = viewModel
                 OutlinedButton(onClick = {
                     scope.launch {
                         if (name.isNotEmpty() && password.isNotEmpty()) {
-                            viewModel.login(name, password)
-                        }
-                        if (response != null){
-                            if (response?.error == null){
-                                preferencesManager.setAccessToken(response!!.data!!.access_token)
+                            viewModel.login(name, password, preferencesManager)
+                            val authResponse = result.value
+                            popUpActive = true
+                            delay(10000)
+                            if (authResponse != null && authResponse.status == "Ok"){
+                                navController.navigate("MainScreen")
+                            }
+                            else{
+                                popUpActive = false
                             }
                         }
                     }
@@ -101,6 +112,20 @@ fun LoginView(navController: NavController, viewModel: MainViewModel = viewModel
                 TextButton(onClick = { navController.navigate("RegisterScreen") }) {
                     Text("Зарегистрироваться")
                 }
+            }
+        }
+    }
+    if (popUpActive) {
+        Popup (
+            alignment = Alignment.Center,
+        ) {
+            Box(
+                Modifier.fillMaxSize().background(Color(0xFF040331)),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = Color.White
+                )
             }
         }
     }

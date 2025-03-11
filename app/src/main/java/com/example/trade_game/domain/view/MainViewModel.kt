@@ -18,24 +18,46 @@ class MainViewModel : ViewModel() {
     private val _auth = MutableStateFlow<AuthResponse?>(null)
     val auth: StateFlow<AuthResponse?> = _auth.asStateFlow()
 
-    fun register(email: String, name: String, password: String) {
+    fun register(email: String, name: String, password: String, preferencesManager: PreferencesManager) {
         viewModelScope.launch {
             try {
                 val newReg = RegisterRequest(email, name, password)
                 val response = RetrofitInstance.apiService.register(newReg)
-                _auth.value = response
+                if (response.data != null && response.status == "Ok"){
+                    preferencesManager.saveUserData(
+                        response.data.email,
+                        response.data.username,
+                        response.data.access_token,
+                        response.data.refresh_token
+                    )
+                    _auth.value = response
+                }
+                else{
+                    _auth.value = AuthResponse("error", null, "Invalid credentials")
+                }
             } catch (ex: Exception) {
                 _auth.value = AuthResponse("error", null, ex.localizedMessage)
             }
         }
     }
 
-    fun login(username: String, password: String) {
+    fun login(username: String, password: String, preferencesManager: PreferencesManager) {
         viewModelScope.launch {
             try {
                 val newReg = LoginRequest(username, password)
                 val response = RetrofitInstance.apiService.login(newReg)
-                _auth.value = response
+
+                if (response.data != null && response.status == "Ok") {
+                    preferencesManager.saveUserData(
+                        response.data.email,
+                        response.data.username,
+                        response.data.access_token,
+                        response.data.refresh_token
+                    )
+                    _auth.value = response
+                } else {
+                    _auth.value = AuthResponse("error", null, "Invalid credentials")
+                }
             } catch (ex: Exception) {
                 _auth.value = AuthResponse("error", null, ex.localizedMessage)
             }
@@ -53,12 +75,11 @@ class MainViewModel : ViewModel() {
 
     fun refreshToken(preferencesManager: PreferencesManager) {
         viewModelScope.launch {
-            val token = preferencesManager.getRefreshToken.first()
-            if (!token.isNullOrBlank()) {
+            val token = preferencesManager.getUserData.first()?.get(3)
+            if (token!!.isNotBlank()) {
                 val result = refresh(token)
                 result.data?.let {
-                    preferencesManager.setAccessToken(it.access_token)
-                    preferencesManager.setRefreshToken(it.refresh_token)
+                    preferencesManager.saveUserData(it.email, it.username, it.access_token, it.refresh_token)
                 }
             } else {
                 _auth.value = AuthResponse("error", null, "error")
