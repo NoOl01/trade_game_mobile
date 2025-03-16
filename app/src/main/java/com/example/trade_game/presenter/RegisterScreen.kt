@@ -119,7 +119,7 @@ fun RegisterScreen(navController: NavController, viewModel: MainViewModel = view
             ) {
                 Spacer(Modifier.height(50.dp))
                 Text(
-                    text = "ВХОД",
+                    text = "АВТОРИЗАЦИЯ",
                     color = Color(0xFF364CDF),
                     fontSize = 24.sp,
                     fontFamily = Montserrat,
