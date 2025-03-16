@@ -31,6 +31,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -139,7 +141,8 @@ fun RegisterScreen(navController: NavController, viewModel: MainViewModel = view
                             Text(
                                 text = "почта",
                                 color = Color(0xB0364CDF),
-                                fontSize = 16.sp
+                                fontSize = 16.sp,
+                                fontFamily = Montserrat
                             )
                         }
                         BasicTextField(
@@ -169,7 +172,8 @@ fun RegisterScreen(navController: NavController, viewModel: MainViewModel = view
                             Text(
                                 text = "логин",
                                 color = Color(0xB0364CDF),
-                                fontSize = 16.sp
+                                fontSize = 16.sp,
+                                fontFamily = Montserrat
                             )
                         }
                         BasicTextField(
@@ -198,7 +202,8 @@ fun RegisterScreen(navController: NavController, viewModel: MainViewModel = view
                                 Text(
                                     text = "пароль",
                                     color = Color(0xB0364CDF),
-                                    fontSize = 16.sp
+                                    fontSize = 16.sp,
+                                    fontFamily = Montserrat
                                 )
                             }
                             BasicTextField(
@@ -236,7 +241,8 @@ fun RegisterScreen(navController: NavController, viewModel: MainViewModel = view
                                 Text(
                                     text = "повторите пароль",
                                     color = Color(0xB0364CDF),
-                                    fontSize = 16.sp
+                                    fontSize = 16.sp,
+                                    fontFamily = Montserrat
                                 )
                             }
                             BasicTextField(
@@ -266,7 +272,13 @@ fun RegisterScreen(navController: NavController, viewModel: MainViewModel = view
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 26.dp),
+                        .padding(horizontal = 26.dp)
+                        .shadow(
+                            elevation = 5.dp,
+                            shape = RoundedCornerShape(50),
+                            clip = false
+                        )
+                        .clip(RoundedCornerShape(50)),
                     onClick = {
                         scope.launch {
                             if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && isValid) {
