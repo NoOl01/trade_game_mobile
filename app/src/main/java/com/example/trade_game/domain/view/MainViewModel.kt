@@ -86,4 +86,10 @@ class MainViewModel : ViewModel() {
             }
         }
     }
+
+    fun events() {
+        viewModelScope.launch {
+
+        }
+    }
 }

@@ -49,11 +49,17 @@ fun Main() {
             val accessToken = accessTokenState.value
             val startDestination =
                 if (accessToken!![2].isNotBlank()) "MainScreen" else "LoginScreen"
+
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
-                bottomBar = { BottomBar(navController = navController) }) { innerPadding ->
+                bottomBar = {
+                    if (startDestination == "MainScreen") {
+                        BottomBar(navController = navController)
+                    }
+                }) { innerPadding ->
                 AppNavigation(navController, startDestination, innerPadding)
             }
+
         }
 
     }
