@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -55,7 +56,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun RegisterScreen(navController: NavController, viewModel: MainViewModel = viewModel()) {
+fun RegisterScreen(navController: NavController, padding: PaddingValues, viewModel: MainViewModel = viewModel()) {
     val limit = 30
 
     var email by remember { mutableStateOf("") }
@@ -80,6 +81,7 @@ fun RegisterScreen(navController: NavController, viewModel: MainViewModel = view
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .padding(padding)
             .background(Color(0xFF1641B7)),
         contentAlignment = Alignment.Center
     ) {

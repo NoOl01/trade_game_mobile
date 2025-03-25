@@ -1,6 +1,5 @@
 package com.example.trade_game
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -10,31 +9,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.navigation.AppNavigation
+import com.example.trade_game.presenter.BottomBar
 import com.example.trade_game.ui.theme.Trade_gameTheme
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Trade_gameTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) {
-                    Main()
-                }
-            }
+            Main()
         }
     }
 }
@@ -45,17 +36,25 @@ fun Main() {
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
 
-    val accessTokenState = preferencesManager.getUserData.collectAsState(initial = arrayOf("", "", "", ""))
+    val accessTokenState =
+        preferencesManager.getUserData.collectAsState(initial = arrayOf("", "", "", ""))
 
     val isDataLoaded = !accessTokenState.value.contentEquals(arrayOf("", "", "", ""))
-
-    if (!isDataLoaded) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            CircularProgressIndicator()
+    Trade_gameTheme {
+        if (!isDataLoaded) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator()
+            }
+        } else {
+            val accessToken = accessTokenState.value
+            val startDestination =
+                if (accessToken!![2].isNotBlank()) "MainScreen" else "LoginScreen"
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                bottomBar = { BottomBar(navController = navController) }) { innerPadding ->
+                AppNavigation(navController, startDestination, innerPadding)
+            }
         }
-    } else {
-        val accessToken = accessTokenState.value
-        val startDestination = if (accessToken!![2].isNotBlank()) "MainScreen" else "LoginScreen"
-        AppNavigation(navController, startDestination)
+
     }
 }

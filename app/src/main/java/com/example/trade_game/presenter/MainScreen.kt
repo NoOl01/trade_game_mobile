@@ -3,6 +3,7 @@ package com.example.trade_game.presenter
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,13 +31,13 @@ import androidx.navigation.NavController
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.data.web_sockets.WebSocketClient
 import com.example.trade_game.data.web_sockets.WebSocketListenerClient
+import com.example.trade_game.domain.RetrofitInstance
 import com.example.trade_game.domain.view.MainViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @Composable
-fun MainView(navController: NavController, viewModel: MainViewModel = viewModel()) {
+fun MainView(navController: NavController, padding: PaddingValues, viewModel: MainViewModel = viewModel()) {
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
     val scope = rememberCoroutineScope()
@@ -54,13 +55,13 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
 
     LaunchedEffect(token) {
         Log.d("tokenM", "Bearer ${userDataState.value!![2]}")
-        wsManager.connect("wss://k42647am6339.share.zrok.io/api/v1/chat/private", wsListener, userDataState.value!![2])
+        wsManager.connect("wss://${RetrofitInstance.DOMAIN}/api/v1/chat/private", wsListener, userDataState.value!![2])
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(30.dp),
+            .padding(padding),
         contentAlignment = Alignment.Center
     ) {
         Column {
