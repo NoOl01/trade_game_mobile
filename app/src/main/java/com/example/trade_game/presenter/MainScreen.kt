@@ -1,5 +1,6 @@
 package com.example.trade_game.presenter
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
@@ -47,13 +50,15 @@ import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.data.web_sockets.WebSocketManager
 import com.example.trade_game.domain.BASE_URL
+import com.example.trade_game.domain.models.WebSocketMarketResponse
 import com.example.trade_game.domain.view.MainViewModel
+import com.example.trade_game.presenter.components.StockCard
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @Composable
 fun MainView(navController: NavController, viewModel: MainViewModel = viewModel()) {
-    var message by remember { mutableStateOf("") }
+    var stocks by remember { mutableStateOf<List<WebSocketMarketResponse>>(emptyList()) }
     var search by remember { mutableStateOf("") }
 
     var error by remember { mutableStateOf(false) }
@@ -73,11 +78,28 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
         webSocketManager.connect { jsonMessage ->
             try {
                 val jsonObject = JSONObject(jsonMessage)
-                message = jsonObject.toString(4)
-            } catch (e: Exception){
+
+                val stockList = mutableListOf<WebSocketMarketResponse>()
+
+                for (key in jsonObject.keys()) {
+                    val stockJson = jsonObject.getJSONObject(key)
+                    val stock = WebSocketMarketResponse(
+                        id = key.toInt(),
+                        symbol = stockJson.getString("symbol"),
+                        price = stockJson.getString("price"),
+                        trend = stockJson.getString("trend"),
+                        changePercent = stockJson.getString("change_percent")
+                    )
+                    stockList.add(stock)
+                }
+
+                stocks = stockList.sortedBy { it.id }
+
+                Log.d("WebSocket", "Parsed stocks: $stocks")
+            } catch (e: Exception) {
                 error = true
+                Log.e("WebSocket", "Error parsing JSON", e)
             }
-            loading = message == ""
         }
     }
 
@@ -87,8 +109,9 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
             .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
-        Column (
-            modifier = Modifier.fillMaxSize()
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
                 .padding(12.dp)
                 .padding(top = 34.dp)
         ) {
@@ -131,7 +154,7 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
                     }
                 }
             }
-            Row (
+            Row(
                 modifier = Modifier.padding(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -148,14 +171,14 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
                     fontWeight = FontWeight.Bold
                 )
             }
-            Column (
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(130.dp)
                     .padding(horizontal = 24.dp)
 
-            ){
-                Row (
+            ) {
+                Row(
                     modifier = Modifier
                         .fillMaxWidth(0.5f)
                         .height(25.dp)
@@ -176,14 +199,20 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
                             .background(Color(0xFF89A9FF))
                     )
                 }
-                Box (
+                Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp, topEnd = 20.dp))
+                        .clip(
+                            RoundedCornerShape(
+                                bottomStart = 20.dp,
+                                bottomEnd = 20.dp,
+                                topEnd = 20.dp
+                            )
+                        )
                         .background(Color(0xFF1641B7)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Column (
+                    Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
@@ -198,10 +227,14 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
                             fontFamily = Montserrat,
                             fontSize = 30.sp,
                             color = Color.White,
-                            fontWeight= FontWeight.Bold
+                            fontWeight = FontWeight.Bold
                         )
                     }
-
+                }
+            }
+            LazyColumn {
+                items(stocks) { stock ->
+                    StockCard(stock)
                 }
             }
         }
