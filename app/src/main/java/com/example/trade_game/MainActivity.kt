@@ -9,16 +9,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.trade_game.data.PreferencesManager
+import com.example.trade_game.domain.view.MainViewModel
 import com.example.trade_game.navigation.AppNavigation
-import com.example.trade_game.presenter.BottomBar
+import com.example.trade_game.presenter.components.BottomBar
 import com.example.trade_game.ui.theme.Trade_gameTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,15 +36,22 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Main() {
+fun Main(viewModel: MainViewModel = viewModel()) {
     val navController = rememberNavController()
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
+    val scope = rememberCoroutineScope()
 
     val accessTokenState =
         preferencesManager.getUserData.collectAsState(initial = arrayOf("", "", "", ""))
 
     val isDataLoaded = !accessTokenState.value.contentEquals(arrayOf("", "", "", ""))
+
+    LaunchedEffect(Unit) {
+        scope.launch {
+            viewModel.refreshToken(preferencesManager)
+        }
+    }
     Trade_gameTheme {
         if (!isDataLoaded) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

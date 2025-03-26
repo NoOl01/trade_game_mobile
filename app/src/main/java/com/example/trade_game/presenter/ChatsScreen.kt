@@ -9,7 +9,6 @@ import com.example.trade_game.domain.view.MainViewModel
 @Composable
 fun ChatsScreen(
     navController: NavController,
-    padding: PaddingValues,
     viewModel: MainViewModel = viewModel()
 ) {
 

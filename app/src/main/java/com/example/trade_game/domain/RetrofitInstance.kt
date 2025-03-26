@@ -3,13 +3,13 @@ package com.example.trade_game.domain
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+const val BASE_URL = "zxherawm2j1d.share.zrok.io"
+
 object RetrofitInstance {
-    const val DOMAIN = "6qmp2qz6iicm.share.zrok.io"
-    private const val BASE_URL = "https://$DOMAIN"
 
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl("https://$BASE_URL")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

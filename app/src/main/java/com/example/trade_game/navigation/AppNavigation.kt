@@ -13,6 +13,7 @@ import com.example.trade_game.presenter.EventsScreen
 import com.example.trade_game.presenter.LoginView
 import com.example.trade_game.presenter.MainView
 import com.example.trade_game.presenter.RegisterScreen
+import com.example.trade_game.presenter.UserMarketScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController, startDestination: String, padding: PaddingValues) {
@@ -22,9 +23,10 @@ fun AppNavigation(navController: NavHostController, startDestination: String, pa
         exitTransition = { fadeOut(animationSpec = tween(0)) },
         popEnterTransition = { fadeIn(animationSpec = tween(0)) },
         popExitTransition = { fadeOut(animationSpec = tween(0)) }) {
-        composable("MainScreen") { MainView(navController, padding) }
-        composable("EventsScreen") { EventsScreen(navController, padding) }
-        composable("ChatsScreen") { ChatsScreen(navController, padding) }
+        composable("MainScreen") { MainView(navController) }
+        composable("EventsScreen") { EventsScreen(navController) }
+        composable("ChatsScreen") { ChatsScreen(navController) }
+        composable("UserMarketScreen") { UserMarketScreen(navController) }
         composable("LoginScreen") { LoginView(navController, padding) }
         composable("RegisterScreen") { RegisterScreen(navController, padding) }
     }

@@ -8,6 +8,7 @@ import com.example.trade_game.domain.models.AuthResponse
 import com.example.trade_game.domain.models.LoginRequest
 import com.example.trade_game.domain.models.RefreshRequest
 import com.example.trade_game.domain.models.RegisterRequest
+import com.example.trade_game.domain.models.UserInfoResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,6 +18,9 @@ import kotlinx.coroutines.launch
 class MainViewModel : ViewModel() {
     private val _auth = MutableStateFlow<AuthResponse?>(null)
     val auth: StateFlow<AuthResponse?> = _auth.asStateFlow()
+
+    private val _userInfo = MutableStateFlow<UserInfoResponse?>(null)
+    val userInfo: StateFlow<UserInfoResponse?> = _userInfo.asStateFlow()
 
     fun register(email: String, name: String, password: String, preferencesManager: PreferencesManager) {
         viewModelScope.launch {
@@ -83,6 +87,20 @@ class MainViewModel : ViewModel() {
                 }
             } else {
                 _auth.value = AuthResponse("error", null, "error")
+            }
+        }
+    }
+
+    fun getUserInfo(preferencesManager: PreferencesManager){
+        viewModelScope.launch {
+            try {
+                val token = preferencesManager.getUserData.first()?.get(2)
+                if (token!!.isNotBlank()){
+                    val result = RetrofitInstance.apiService.getUserInfo("Bearer $token")
+                    _userInfo.value = result
+                }
+            } catch (ex: Exception){
+                _userInfo.value = UserInfoResponse("error", null, ex.localizedMessage)
             }
         }
     }

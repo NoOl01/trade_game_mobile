@@ -5,8 +5,10 @@ import com.example.trade_game.domain.models.EventsResponse
 import com.example.trade_game.domain.models.LoginRequest
 import com.example.trade_game.domain.models.RefreshRequest
 import com.example.trade_game.domain.models.RegisterRequest
+import com.example.trade_game.domain.models.UserInfoResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 interface RetrofitApi{
@@ -22,4 +24,6 @@ interface RetrofitApi{
     @GET("/api/v1/events")
     suspend fun events(): EventsResponse
 
+    @GET("/api/v1/users/info")
+    suspend fun getUserInfo(@Header("Authorization") token: String): UserInfoResponse
 }

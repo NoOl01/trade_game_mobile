@@ -16,13 +16,11 @@ import com.example.trade_game.domain.view.MainViewModel
 @Composable
 fun EventsScreen(
     navController: NavController,
-    padding: PaddingValues,
     viewModel: MainViewModel = viewModel()
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
             .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
