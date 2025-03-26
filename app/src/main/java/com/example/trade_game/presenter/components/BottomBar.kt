@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -27,85 +29,90 @@ import com.example.trade_game.domain.view.MainViewModel
 
 @Composable
 fun BottomBar(navController: NavController, viewModel: MainViewModel = viewModel()) {
-    Box(
+    Card (
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White),
-        contentAlignment = Alignment.Center
+            .padding(horizontal = 20.dp, vertical = 20.dp),
+        shape = RoundedCornerShape(30.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
-        val navBackStackEntry: NavBackStackEntry? = navController.currentBackStackEntryAsState().value
-        val currentRoute = navBackStackEntry?.destination?.route
-        println(currentRoute)
-        Row(
+        Box(
             modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .padding(
-                    bottom = 28.dp, start = 8.dp, top = 8.dp, end = 8.dp
-                )
-                .clip(RoundedCornerShape(30.dp))
+                .fillMaxWidth()
+                .height(50.dp)
                 .background(Color.White),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            contentAlignment = Alignment.Center
         ) {
+            val navBackStackEntry: NavBackStackEntry? = navController.currentBackStackEntryAsState().value
+            val currentRoute = navBackStackEntry?.destination?.route
+            println(currentRoute)
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .clip(RoundedCornerShape(30.dp))
+                    .background(Color.White),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
 
-            IconButton(
-                onClick = {
-                    navController.navigate("MainScreen")
+                IconButton(
+                    onClick = {
+                        navController.navigate("MainScreen")
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.market),
+                        contentDescription = "Магазин",
+                        tint = if (currentRoute == "MainScreen") Color(0xFF2A41DA) else Color(0xFF7F7F7F),
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp)
+                    )
                 }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.market),
-                    contentDescription = "Магазин",
-                    tint = if (currentRoute == "MainScreen") Color(0xFF2A41DA) else Color(0xFF7F7F7F),
-                    modifier = Modifier
-                        .height(30.dp)
-                        .width(30.dp)
-                )
-            }
-            IconButton(
-                onClick = {
-                    navController.navigate("EventsScreen")
+                IconButton(
+                    onClick = {
+                        navController.navigate("EventsScreen")
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.events),
+                        contentDescription = "События",
+                        tint = if (currentRoute == "EventsScreen") Color(0xFF2A41DA) else Color(0xFF7F7F7F),
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp)
+                    )
                 }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.events),
-                    contentDescription = "События",
-                    tint = if (currentRoute == "EventsScreen") Color(0xFF2A41DA) else Color(0xFF7F7F7F),
-                    modifier = Modifier
-                        .height(30.dp)
-                        .width(30.dp)
-                )
-            }
-            IconButton(
-                onClick = {
-                    navController.navigate("MainScreen")
+                IconButton(
+                    onClick = {
+                        navController.navigate("MarketScreen")
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.purchases),
+                        contentDescription = "Покупки",
+                        tint = if (currentRoute == "MarketScreen") Color(0xFF2A41DA) else Color(0xFF7F7F7F),
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp)
+                    )
                 }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.purchases),
-                    contentDescription = "Покупки",
-                    tint = if (currentRoute == "MainScreen") Color(0xFF2A41DA) else Color(0xFF7F7F7F),
-                    modifier = Modifier
-                        .height(30.dp)
-                        .width(30.dp)
-                )
-            }
-            IconButton(
-                onClick = {
-                    navController.navigate("ChatsScreen")
+                IconButton(
+                    onClick = {
+                        navController.navigate("ChatsScreen")
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.messages),
+                        contentDescription = "Сообщения",
+                        tint = if (currentRoute == "ChatsScreen") Color(0xFF2A41DA) else Color(0xFF7F7F7F),
+                        modifier = Modifier
+                            .height(30.dp)
+                            .width(30.dp)
+                    )
                 }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.messages),
-                    contentDescription = "Сообщения",
-                    tint = if (currentRoute == "ChatsScreen") Color(0xFF2A41DA) else Color(0xFF7F7F7F),
-                    modifier = Modifier
-                        .height(30.dp)
-                        .width(30.dp)
-                )
-            }
 
+            }
         }
     }
-
 }
 

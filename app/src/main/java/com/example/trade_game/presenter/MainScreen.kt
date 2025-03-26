@@ -42,7 +42,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Popup
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.trade_game.R
@@ -62,7 +61,7 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
     var search by remember { mutableStateOf("") }
 
     var error by remember { mutableStateOf(false) }
-    var loading by remember { mutableStateOf(false) }
+    var loading by remember { mutableStateOf(true) }
 
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
@@ -94,7 +93,7 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
                 }
 
                 stocks = stockList.sortedBy { it.id }
-
+                loading = false
                 Log.d("WebSocket", "Parsed stocks: $stocks")
             } catch (e: Exception) {
                 error = true
@@ -232,35 +231,28 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
                     }
                 }
             }
-            LazyColumn {
-                items(stocks) { stock ->
-                    StockCard(stock)
-                }
-            }
-        }
-        if (error) {
-
-            Popup(
-                alignment = Alignment.Center
-            ) {
-                Text("ОШИБКА", color = Color.White)
-            }
-        }
-        if (loading) {
-            Popup(
-                alignment = Alignment.Center,
-            ) {
+            Spacer(Modifier.height(20.dp))
+            if (loading){
                 Box(
-                    Modifier
-                        .fillMaxSize()
-                        .background(Color(0xFF040331)),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
-                ) {
+                ){
                     CircularProgressIndicator(
-                        color = Color.White
+                        color = Color(0xFF1641B7)
                     )
                 }
+
+            } else {
+                LazyColumn {
+                    items(stocks) { stock ->
+                        StockCard(stock, navController)
+                    }
+                    item {
+                        Spacer(Modifier.height(60.dp))
+                    }
+                }
             }
+
         }
     }
 }

@@ -17,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.MainViewModel
@@ -46,6 +48,8 @@ fun Main(viewModel: MainViewModel = viewModel()) {
         preferencesManager.getUserData.collectAsState(initial = arrayOf("", "", "", ""))
 
     val isDataLoaded = !accessTokenState.value.contentEquals(arrayOf("", "", "", ""))
+    val navBackStackEntry: NavBackStackEntry? = navController.currentBackStackEntryAsState().value
+    val currentRoute = navBackStackEntry?.destination?.route
 
     LaunchedEffect(Unit) {
         scope.launch {
@@ -65,7 +69,7 @@ fun Main(viewModel: MainViewModel = viewModel()) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 bottomBar = {
-                    if (startDestination == "MainScreen") {
+                    if (currentRoute == "MainScreen" || currentRoute == "EventsScreen" || currentRoute == "MarketScreen" || currentRoute == "ChatsScreen") {
                         BottomBar(navController = navController)
                     }
                 }) { innerPadding ->
@@ -73,6 +77,5 @@ fun Main(viewModel: MainViewModel = viewModel()) {
             }
 
         }
-
     }
 }
