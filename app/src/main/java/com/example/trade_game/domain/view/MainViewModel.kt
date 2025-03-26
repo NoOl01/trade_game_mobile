@@ -7,6 +7,8 @@ import com.example.trade_game.domain.RetrofitInstance
 import com.example.trade_game.domain.models.AuthResponse
 import com.example.trade_game.domain.models.EventsResponse
 import com.example.trade_game.domain.models.LoginRequest
+import com.example.trade_game.domain.models.MarketTransactionRequest
+import com.example.trade_game.domain.models.MarketTransactionResponse
 import com.example.trade_game.domain.models.RefreshRequest
 import com.example.trade_game.domain.models.RegisterRequest
 import com.example.trade_game.domain.models.UserInfoResponse
@@ -25,6 +27,12 @@ class MainViewModel : ViewModel() {
 
     private val _events = MutableStateFlow<EventsResponse?>(null)
     val events: StateFlow<EventsResponse?> = _events.asStateFlow()
+
+    private val _marketSell = MutableStateFlow<MarketTransactionResponse?>(null)
+    val marketSellData: StateFlow<MarketTransactionResponse?> = _marketSell.asStateFlow()
+
+    private val _marketBuy = MutableStateFlow<MarketTransactionResponse?>(null)
+    val marketBuyData: StateFlow<MarketTransactionResponse?> = _marketBuy.asStateFlow()
 
     fun register(
         email: String,
@@ -125,6 +133,46 @@ class MainViewModel : ViewModel() {
                 _events.value = result
             } catch (ex: Exception) {
                 _events.value = EventsResponse("Error", emptyList(), ex.localizedMessage)
+            }
+        }
+    }
+
+    fun marketSell(amount: Float, assetId: Int, preferencesManager: PreferencesManager) {
+        viewModelScope.launch {
+            try {
+                val token = preferencesManager.getUserData.first()?.get(2)
+                val newTrans = MarketTransactionRequest(
+                    amount = amount,
+                    asset_id = assetId
+                )
+                val response = RetrofitInstance.apiService.marketSell(
+                    marketTransaction = newTrans,
+                    token = "Bearer $token"
+                )
+                _marketSell.value = response
+
+            } catch (ex: Exception) {
+                _marketSell.value = MarketTransactionResponse("Error", null, ex.localizedMessage)
+            }
+        }
+    }
+
+    fun marketBuy(amount: Float, assetId: Int, preferencesManager: PreferencesManager) {
+        viewModelScope.launch {
+            try {
+                val token = preferencesManager.getUserData.first()?.get(2)
+                val newTrans = MarketTransactionRequest(
+                    amount = amount,
+                    asset_id = assetId
+                )
+                val response = RetrofitInstance.apiService.marketBuy(
+                    marketTransaction = newTrans,
+                    token = "Bearer $token"
+                )
+                _marketSell.value = response
+
+            } catch (ex: Exception) {
+                _marketSell.value = MarketTransactionResponse("Error", null, ex.localizedMessage)
             }
         }
     }

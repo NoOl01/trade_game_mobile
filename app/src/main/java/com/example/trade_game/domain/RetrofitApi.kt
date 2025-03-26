@@ -2,6 +2,7 @@ package com.example.trade_game.domain
 
 import com.example.trade_game.domain.models.AuthResponse
 import com.example.trade_game.domain.models.CancelOrderResponse
+import com.example.trade_game.domain.models.ChatsResponse
 import com.example.trade_game.domain.models.CreateOrderResponse
 import com.example.trade_game.domain.models.EventsResponse
 import com.example.trade_game.domain.models.ExecuteOrderResponse
@@ -111,4 +112,7 @@ interface RetrofitApi {
 
     @GET("/api/v1/price/history/{asset_id}")
     suspend fun priceHistory(@Path("asset_id") assetId: Int): PriceHistoryResponse
+
+    @GET("/api/v1/chats/list")
+    suspend fun getChatsList(@Header("Authorization") token: String): ChatsResponse
 }
