@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.RetrofitInstance
 import com.example.trade_game.domain.models.AuthResponse
+import com.example.trade_game.domain.models.EventsResponse
 import com.example.trade_game.domain.models.LoginRequest
 import com.example.trade_game.domain.models.RefreshRequest
 import com.example.trade_game.domain.models.RegisterRequest
@@ -22,12 +23,20 @@ class MainViewModel : ViewModel() {
     private val _userInfo = MutableStateFlow<UserInfoResponse?>(null)
     val userInfo: StateFlow<UserInfoResponse?> = _userInfo.asStateFlow()
 
-    fun register(email: String, name: String, password: String, preferencesManager: PreferencesManager) {
+    private val _events = MutableStateFlow<EventsResponse?>(null)
+    val events: StateFlow<EventsResponse?> = _events.asStateFlow()
+
+    fun register(
+        email: String,
+        name: String,
+        password: String,
+        preferencesManager: PreferencesManager
+    ) {
         viewModelScope.launch {
             try {
                 val newReg = RegisterRequest(email, name, password)
                 val response = RetrofitInstance.apiService.register(newReg)
-                if (response.data != null && response.status == "Ok"){
+                if (response.data != null && response.status == "Ok") {
                     preferencesManager.saveUserData(
                         response.data.email,
                         response.data.username,
@@ -35,12 +44,11 @@ class MainViewModel : ViewModel() {
                         response.data.refresh_token
                     )
                     _auth.value = response
-                }
-                else{
+                } else {
                     _auth.value = AuthResponse("error", null, "Invalid credentials")
                 }
             } catch (ex: Exception) {
-                _auth.value = AuthResponse("error", null, ex.localizedMessage)
+                _auth.value = AuthResponse("Error", null, ex.localizedMessage)
             }
         }
     }
@@ -63,7 +71,7 @@ class MainViewModel : ViewModel() {
                     _auth.value = AuthResponse("error", null, "Invalid credentials")
                 }
             } catch (ex: Exception) {
-                _auth.value = AuthResponse("error", null, ex.localizedMessage)
+                _auth.value = AuthResponse("Error", null, ex.localizedMessage)
             }
         }
     }
@@ -73,7 +81,7 @@ class MainViewModel : ViewModel() {
             val newRefreshRequest = RefreshRequest(refreshToken)
             RetrofitInstance.apiService.refresh(newRefreshRequest)
         } catch (ex: Exception) {
-            AuthResponse("error", null, ex.localizedMessage)
+            AuthResponse("Error", null, ex.localizedMessage)
         }
     }
 
@@ -83,31 +91,41 @@ class MainViewModel : ViewModel() {
             if (token!!.isNotBlank()) {
                 val result = refresh(token)
                 result.data?.let {
-                    preferencesManager.saveUserData(it.email, it.username, it.access_token, it.refresh_token)
+                    preferencesManager.saveUserData(
+                        it.email,
+                        it.username,
+                        it.access_token,
+                        it.refresh_token
+                    )
                 }
             } else {
-                _auth.value = AuthResponse("error", null, "error")
+                _auth.value = AuthResponse("Error", null, "error")
             }
         }
     }
 
-    fun getUserInfo(preferencesManager: PreferencesManager){
+    fun getUserInfo(preferencesManager: PreferencesManager) {
         viewModelScope.launch {
             try {
                 val token = preferencesManager.getUserData.first()?.get(2)
-                if (token!!.isNotBlank()){
+                if (token!!.isNotBlank()) {
                     val result = RetrofitInstance.apiService.getUserInfo("Bearer $token")
                     _userInfo.value = result
                 }
-            } catch (ex: Exception){
-                _userInfo.value = UserInfoResponse("error", null, ex.localizedMessage)
+            } catch (ex: Exception) {
+                _userInfo.value = UserInfoResponse("Error", null, ex.localizedMessage)
             }
         }
     }
 
-    fun events() {
+    fun getEvents() {
         viewModelScope.launch {
-
+            try {
+                val result = RetrofitInstance.apiService.events()
+                _events.value = result
+            } catch (ex: Exception) {
+                _events.value = EventsResponse("Error", emptyList(), ex.localizedMessage)
+            }
         }
     }
 }
