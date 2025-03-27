@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -92,7 +93,9 @@ fun TopUsersScreen(navController: NavController, viewModel: UserViewModel = view
                     )
                 }
                 usersTop?.data?.let { userList ->
-                    LazyColumn {
+                    LazyColumn (
+                        modifier = Modifier.fillMaxHeight(0.89f)
+                    ) {
                         item{
                             Spacer(Modifier.height(20.dp))
                         }
