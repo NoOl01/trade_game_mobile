@@ -25,10 +25,10 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.trade_game.R
-import com.example.trade_game.domain.view.MainViewModel
+import com.example.trade_game.domain.view.UserViewModel
 
 @Composable
-fun BottomBar(navController: NavController, viewModel: MainViewModel = viewModel()) {
+fun BottomBar(navController: NavController, viewModel: UserViewModel = viewModel()) {
     Card (
         modifier = Modifier
             .fillMaxWidth()

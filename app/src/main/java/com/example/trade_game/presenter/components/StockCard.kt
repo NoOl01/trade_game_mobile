@@ -78,7 +78,7 @@ fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
                     Row(
                         modifier = Modifier
                             .padding(2.dp)
-                            .width(50.dp)
+                            .width(70.dp)
                             .height(40.dp)
                             .clip(RoundedCornerShape(15.dp))
                             .background(Color(0xFF1641B7)),
@@ -87,9 +87,17 @@ fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
                     ) {
                         Text(
                             text = stock.symbol,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            fontFamily = Montserrat,
+                            fontSize = 14.sp
                         )
                     }
+                    Spacer(Modifier.width(10.dp))
+                    Text(
+                        text = stock.name,
+                        color = Color.Black,
+                        fontFamily = Montserrat
+                    )
                 }
                 Row (
                     modifier = Modifier

@@ -49,12 +49,12 @@ import com.example.trade_game.R
 import com.example.trade_game.common.HeliosExtC
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
-import com.example.trade_game.domain.view.MainViewModel
+import com.example.trade_game.domain.view.AuthViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginView(navController: NavController, padding: PaddingValues, viewModel: MainViewModel = viewModel()) {
+fun LoginView(navController: NavController, padding: PaddingValues, viewModel: AuthViewModel = viewModel()) {
     val limit = 30
     var name by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }

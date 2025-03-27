@@ -51,12 +51,12 @@ import com.example.trade_game.common.HeliosExtC
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.common.isValidEmail
 import com.example.trade_game.data.PreferencesManager
-import com.example.trade_game.domain.view.MainViewModel
+import com.example.trade_game.domain.view.AuthViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun RegisterScreen(navController: NavController, padding: PaddingValues, viewModel: MainViewModel = viewModel()) {
+fun RegisterScreen(navController: NavController, padding: PaddingValues, viewModel: AuthViewModel = viewModel()) {
     val limit = 30
 
     var email by remember { mutableStateOf("") }

@@ -15,6 +15,7 @@ import com.example.trade_game.presenter.MainView
 import com.example.trade_game.presenter.MarketScreen
 import com.example.trade_game.presenter.RegisterScreen
 import com.example.trade_game.presenter.StockScreen
+import com.example.trade_game.presenter.TopUsersScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController, startDestination: String, padding: PaddingValues) {
@@ -29,6 +30,7 @@ fun AppNavigation(navController: NavHostController, startDestination: String, pa
         composable("ChatsScreen") { ChatsScreen(navController) }
         composable("MarketScreen") { MarketScreen(navController) }
         composable("StockScreen") { StockScreen(navController) }
+        composable("TopUsersScreen") { TopUsersScreen(navController) }
         composable("LoginScreen") { LoginView(navController, padding) }
         composable("RegisterScreen") { RegisterScreen(navController, padding) }
     }

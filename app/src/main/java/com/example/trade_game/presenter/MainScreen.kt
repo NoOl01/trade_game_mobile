@@ -21,8 +21,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -50,13 +53,14 @@ import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.data.web_sockets.WebSocketManager
 import com.example.trade_game.domain.BASE_URL
 import com.example.trade_game.domain.models.WebSocketMarketResponse
-import com.example.trade_game.domain.view.MainViewModel
+import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.StockCard
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @Composable
-fun MainView(navController: NavController, viewModel: MainViewModel = viewModel()) {
+fun MainView(navController: NavController, viewModel: UserViewModel = viewModel()) {
     var stocks by remember { mutableStateOf<List<WebSocketMarketResponse>>(emptyList()) }
     var search by remember { mutableStateOf("") }
 
@@ -67,12 +71,18 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
     val preferencesManager = remember { PreferencesManager(context) }
     val scope = rememberCoroutineScope()
     val userInfo by viewModel.userInfo.collectAsState()
+    val userPlace by viewModel.userPlace.collectAsState()
 
     val webSocketManager = remember { WebSocketManager("wss://${BASE_URL}/api/v1/market/data") }
 
     LaunchedEffect(Unit) {
         scope.launch {
             viewModel.getUserInfo(preferencesManager)
+            viewModel.userInfo.collectLatest { userInfo ->
+                userInfo?.data?.id?.let { userId ->
+                    viewModel.getUserPlace(userId)
+                }
+            }
         }
         webSocketManager.connect { jsonMessage ->
             try {
@@ -85,6 +95,7 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
                     val stock = WebSocketMarketResponse(
                         id = key.toInt(),
                         symbol = stockJson.getString("symbol"),
+                        name = stockJson.getString("name"),
                         price = stockJson.getString("price"),
                         trend = stockJson.getString("trend"),
                         changePercent = stockJson.getString("change_percent")
@@ -157,18 +168,32 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
                 modifier = Modifier.padding(24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.user),
-                    contentDescription = "UserIcon"
-                )
+                IconButton(
+                    onClick = {
+                        Log.d("12111", "ok")
+                    }
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.user),
+                        contentDescription = "UserIcon"
+                    )
+                }
                 Spacer(Modifier.width(10.dp))
-                Text(
-                    text = userInfo?.data?.username ?: "Загрузка...",
-                    color = Color.Black,
-                    fontSize = 20.sp,
-                    fontFamily = Montserrat,
-                    fontWeight = FontWeight.Bold
-                )
+                Column {
+                    Text(
+                        text = userInfo?.data?.username ?: "Загрузка...",
+                        color = Color.Black,
+                        fontSize = 20.sp,
+                        fontFamily = Montserrat,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "Место #${userPlace?.data?.place ?: "0"}",
+                        color = Color(0xFF1641B7),
+                        fontFamily = Montserrat,
+                        fontSize = 14.sp
+                    )
+                }
             }
             Column(
                 modifier = Modifier
@@ -248,11 +273,26 @@ fun MainView(navController: NavController, viewModel: MainViewModel = viewModel(
                         StockCard(stock, navController)
                     }
                     item {
+                        // Потом убрать
+                        Column (
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ){
+                            Text(
+                                "Тут костыль так как не знаю куда поставить кнопку для перехода",
+                                textAlign = TextAlign.Center,
+                                color = Color.Black
+                            )
+                            Button(onClick = {
+                                navController.navigate("TopUsersScreen")
+                            }) {
+                                Text("Топ игроков")
+                            }
+                        }
+                        // А спейсер не трогать (меню снизу будет закрывать последний элемент)
                         Spacer(Modifier.height(60.dp))
                     }
                 }
             }
-
         }
     }
 }

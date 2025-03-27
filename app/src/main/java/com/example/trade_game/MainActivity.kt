@@ -21,7 +21,7 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.trade_game.data.PreferencesManager
-import com.example.trade_game.domain.view.MainViewModel
+import com.example.trade_game.domain.view.AuthViewModel
 import com.example.trade_game.navigation.AppNavigation
 import com.example.trade_game.presenter.components.BottomBar
 import com.example.trade_game.ui.theme.Trade_gameTheme
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Main(viewModel: MainViewModel = viewModel()) {
+fun Main(viewModel: AuthViewModel = viewModel()) {
     val navController = rememberNavController()
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
