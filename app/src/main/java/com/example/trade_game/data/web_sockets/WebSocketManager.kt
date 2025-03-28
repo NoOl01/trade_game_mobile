@@ -37,6 +37,11 @@ class WebSocketManager(private val url: String) {
         })
     }
 
+    fun sendMessage(recipientId: Long, message: String): Boolean{
+        val json = """{"recipient_id":$recipientId,"text":"$message"}"""
+        return webSocket?.send(json) ?: false
+    }
+
     fun disconnect(){
         webSocket?.close(1000, "Отключение")
         client.dispatcher.executorService.shutdown()

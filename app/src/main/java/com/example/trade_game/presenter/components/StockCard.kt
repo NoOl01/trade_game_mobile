@@ -68,7 +68,7 @@ fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
             ) {
                 Row(
                     modifier = Modifier
-                        .fillMaxWidth(0.75f)
+                        .fillMaxWidth(0.65f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp))
                         .background(Color.White),

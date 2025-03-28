@@ -40,10 +40,12 @@ import com.example.trade_game.presenter.components.RatingUserCard
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun TopUsersScreen(navController: NavController, viewModel: UserViewModel = viewModel()) {
+fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, viewModel: UserViewModel = viewModel()) {
     val usersTop by viewModel.usersTop.collectAsState()
     val userPlace by viewModel.userPlace.collectAsState()
     val userInfo by viewModel.userInfo.collectAsState()
+
+    val ratingPadding = if (isGestureNavigation) 0.dp else 20.dp
 
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
@@ -66,7 +68,8 @@ fun TopUsersScreen(navController: NavController, viewModel: UserViewModel = view
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 14.dp, vertical = 30.dp),
+                .padding(horizontal = 14.dp, vertical = 30.dp)
+                .padding(bottom = ratingPadding),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column {

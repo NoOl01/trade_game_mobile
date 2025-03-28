@@ -3,7 +3,6 @@ package com.example.trade_game.presenter
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,11 +37,13 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun EventsScreen(
     navController: NavController,
-    paddingValues: PaddingValues,
+    isGestureNavigation: Boolean,
     viewModel: EventsViewModel = viewModel()
 ) {
     val scope = rememberCoroutineScope()
     val events by viewModel.events.collectAsState()
+
+    val ratingPadding = if (isGestureNavigation) 60.dp else 90.dp
 
     LaunchedEffect(Unit) {
         scope.launch {
@@ -53,13 +54,15 @@ fun EventsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues)
             .background(Color.White),
         contentAlignment = Alignment.TopCenter
     ) {
         when {
             events != null -> {
-                LazyColumn {
+                LazyColumn (
+                    modifier = Modifier
+                        .padding(top = 30.dp, bottom = ratingPadding)
+                ) {
                     items(events!!.data) { event ->
                         EventCard(event)
                     }
@@ -69,7 +72,6 @@ fun EventsScreen(
 
     }
 }
-
 
 @Composable
 fun EventCard(event: Event) {

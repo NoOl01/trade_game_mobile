@@ -8,6 +8,7 @@ import com.example.trade_game.domain.view.UserViewModel
 @Composable
 fun ChatsScreen(
     navController: NavController,
+    isGestureNavigation: Boolean,
     viewModel: UserViewModel = viewModel()
 ) {
 

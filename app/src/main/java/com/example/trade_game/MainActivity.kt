@@ -1,11 +1,18 @@
 package com.example.trade_game
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -16,6 +23,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -37,6 +45,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Main(viewModel: AuthViewModel = viewModel()) {
     val navController = rememberNavController()
@@ -50,6 +59,8 @@ fun Main(viewModel: AuthViewModel = viewModel()) {
     val isDataLoaded = !accessTokenState.value.contentEquals(arrayOf("", "", "", ""))
     val navBackStackEntry: NavBackStackEntry? = navController.currentBackStackEntryAsState().value
     val currentRoute = navBackStackEntry?.destination?.route
+
+    val isGestureNavigation = isGestureNavigation()
 
     LaunchedEffect(Unit) {
         scope.launch {
@@ -69,13 +80,23 @@ fun Main(viewModel: AuthViewModel = viewModel()) {
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
                 bottomBar = {
-                    if (currentRoute == "MainScreen" || currentRoute == "EventsScreen" || currentRoute == "MarketScreen" || currentRoute == "ChatsScreen") {
-                        BottomBar(navController = navController)
+                    if (currentRoute in listOf("MainScreen", "EventsScreen", "MarketScreen", "ChatsScreen")) {
+                        Box(
+                            modifier = Modifier.padding(bottom = if (isGestureNavigation) 0.dp else 28.dp) // Поднимаем BottomBar
+                        ) {
+                            BottomBar(navController = navController)
+                        }
                     }
-                }) { innerPadding ->
-                AppNavigation(navController, startDestination, innerPadding)
+                }
+            ) {
+                AppNavigation(navController, startDestination, isGestureNavigation)
             }
-
         }
     }
+}
+
+@Composable
+fun isGestureNavigation(): Boolean {
+    val navigationBarsHeight = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    return navigationBarsHeight == 0.dp
 }

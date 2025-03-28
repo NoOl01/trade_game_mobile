@@ -7,7 +7,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -61,7 +60,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @Composable
-fun MainView(navController: NavController, padding: PaddingValues, viewModel: UserViewModel = viewModel()) {
+fun MainView(navController: NavController, isGestureNavigation: Boolean, viewModel: UserViewModel = viewModel()) {
     var stocks by remember { mutableStateOf<List<WebSocketMarketResponse>>(emptyList()) }
     var search by remember { mutableStateOf("") }
 
@@ -73,6 +72,8 @@ fun MainView(navController: NavController, padding: PaddingValues, viewModel: Us
     val scope = rememberCoroutineScope()
     val userInfo by viewModel.userInfo.collectAsState()
     val userPlace by viewModel.userPlace.collectAsState()
+
+    val ratingPadding = if (isGestureNavigation) 0.dp else 30.dp
 
     val webSocketManager = remember { WebSocketManager("wss://${BASE_URL}/api/v1/market/data") }
 
@@ -117,7 +118,6 @@ fun MainView(navController: NavController, padding: PaddingValues, viewModel: Us
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
             .background(Color.White),
         contentAlignment = Alignment.Center
     ) {
@@ -161,7 +161,9 @@ fun MainView(navController: NavController, padding: PaddingValues, viewModel: Us
                             value = search,
                             onValueChange = { search = it },
                             textStyle = TextStyle(fontSize = 16.sp, color = Color(0xFF2A41DA)),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            maxLines = 1,
+                            singleLine = true
                         )
                     }
                 }
@@ -291,7 +293,7 @@ fun MainView(navController: NavController, padding: PaddingValues, viewModel: Us
                             }
                         }
                         // А спейсер не трогать (меню снизу будет закрывать последний элемент)
-                        Spacer(Modifier.height(60.dp))
+                        Spacer(Modifier.height(60.dp + ratingPadding))
                     }
                 }
             }

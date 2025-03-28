@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -56,7 +55,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun RegisterScreen(navController: NavController, padding: PaddingValues, viewModel: AuthViewModel = viewModel()) {
+fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = viewModel()) {
     val limit = 30
 
     var email by remember { mutableStateOf("") }
@@ -81,7 +80,6 @@ fun RegisterScreen(navController: NavController, padding: PaddingValues, viewMod
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(padding)
             .background(Color(0xFF1641B7)),
         contentAlignment = Alignment.Center
     ) {
@@ -102,14 +100,16 @@ fun RegisterScreen(navController: NavController, padding: PaddingValues, viewMod
                     contentDescription = "Логотип",
                     modifier = Modifier
                         .height(40.dp)
-                        .width(40.dp)
+                        .width(40.dp),
+                    tint = Color.White
                 )
                 Spacer(Modifier.width(10.dp))
                 Text(
                     text = "БАНК НН",
                     fontSize = 20.sp,
                     fontFamily = HeliosExtC,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
                 )
             }
             Spacer(Modifier.height(40.dp))
@@ -150,11 +150,13 @@ fun RegisterScreen(navController: NavController, padding: PaddingValues, viewMod
                         BasicTextField(
                             value = email,
                             onValueChange = {
-                                email = it
+                                email = it.take(limit)
                                 isValid = isValidEmail(it)
                             },
                             textStyle = TextStyle(fontSize = 16.sp, color = Color(0xFF2A41DA)),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            maxLines = 1,
+                            singleLine = true
                         )
                     }
                 }
@@ -180,9 +182,11 @@ fun RegisterScreen(navController: NavController, padding: PaddingValues, viewMod
                         }
                         BasicTextField(
                             value = name,
-                            onValueChange = { name = it },
+                            onValueChange = { name = it.take(limit) },
                             textStyle = TextStyle(fontSize = 16.sp, color = Color(0xFF2A41DA)),
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth(),
+                            maxLines = 1,
+                            singleLine = true
                         )
                     }
                 }
@@ -210,10 +214,12 @@ fun RegisterScreen(navController: NavController, padding: PaddingValues, viewMod
                             }
                             BasicTextField(
                                 value = password,
-                                onValueChange = { password = it },
+                                onValueChange = { password = it.take(limit) },
                                 textStyle = TextStyle(fontSize = 16.sp, color = Color(0xFF2A41DA)),
                                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                maxLines = 1,
+                                singleLine = true
                             )
                         }
                         IconButton(onClick = { passwordVisible = !passwordVisible }) {
@@ -249,10 +255,12 @@ fun RegisterScreen(navController: NavController, padding: PaddingValues, viewMod
                             }
                             BasicTextField(
                                 value = passwordRepeat,
-                                onValueChange = { passwordRepeat = it },
+                                onValueChange = { passwordRepeat = it.take(limit) },
                                 textStyle = TextStyle(fontSize = 16.sp, color = Color(0xFF2A41DA)),
                                 visualTransformation = if (passwordRepeatVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
+                                maxLines = 1,
+                                singleLine = true
                             )
                         }
                         IconButton(onClick = { passwordRepeatVisible = !passwordRepeatVisible }) {
