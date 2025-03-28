@@ -25,8 +25,8 @@ fun AppNavigation(navController: NavHostController, startDestination: String, pa
         exitTransition = { fadeOut(animationSpec = tween(0)) },
         popEnterTransition = { fadeIn(animationSpec = tween(0)) },
         popExitTransition = { fadeOut(animationSpec = tween(0)) }) {
-        composable("MainScreen") { MainView(navController) }
-        composable("EventsScreen") { EventsScreen(navController) }
+        composable("MainScreen") { MainView(navController, padding) }
+        composable("EventsScreen") { EventsScreen(navController, padding) }
         composable("ChatsScreen") { ChatsScreen(navController) }
         composable("MarketScreen") { MarketScreen(navController) }
         composable("StockScreen") { StockScreen(navController) }

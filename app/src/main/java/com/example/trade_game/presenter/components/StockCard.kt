@@ -89,7 +89,8 @@ fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
                             text = stock.symbol,
                             textAlign = TextAlign.Center,
                             fontFamily = Montserrat,
-                            fontSize = 14.sp
+                            fontSize = 14.sp,
+                            color = Color.White
                         )
                     }
                     Spacer(Modifier.width(10.dp))
@@ -114,7 +115,8 @@ fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
                             text = "$${stock.price}",
                             fontSize = 20.sp,
                             modifier = Modifier.height(20.dp),
-                            fontFamily = Montserrat
+                            fontFamily = Montserrat,
+                            color = Color.White
                         )
                         Row (
                             verticalAlignment = Alignment.CenterVertically
@@ -127,7 +129,8 @@ fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
                             Text(
                                 text = "${stock.changePercent}%",
                                 fontSize = 14.sp,
-                                fontFamily = Montserrat
+                                fontFamily = Montserrat,
+                                color = Color.White
                             )
                         }
                     }

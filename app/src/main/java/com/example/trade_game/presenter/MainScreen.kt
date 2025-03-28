@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -60,7 +61,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 @Composable
-fun MainView(navController: NavController, viewModel: UserViewModel = viewModel()) {
+fun MainView(navController: NavController, padding: PaddingValues, viewModel: UserViewModel = viewModel()) {
     var stocks by remember { mutableStateOf<List<WebSocketMarketResponse>>(emptyList()) }
     var search by remember { mutableStateOf("") }
 
@@ -116,6 +117,7 @@ fun MainView(navController: NavController, viewModel: UserViewModel = viewModel(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .padding(padding)
             .background(Color.White),
         contentAlignment = Alignment.Center
     ) {

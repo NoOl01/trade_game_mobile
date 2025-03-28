@@ -45,7 +45,7 @@ fun BottomBar(navController: NavController, viewModel: UserViewModel = viewModel
         ) {
             val navBackStackEntry: NavBackStackEntry? = navController.currentBackStackEntryAsState().value
             val currentRoute = navBackStackEntry?.destination?.route
-            println(currentRoute)
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth(0.9f)

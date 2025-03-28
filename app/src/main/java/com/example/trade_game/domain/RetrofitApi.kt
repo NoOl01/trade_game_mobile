@@ -38,7 +38,7 @@ interface RetrofitApi {
     suspend fun refresh(@Body refreshReq: RefreshRequest): AuthResponse
 
     @GET("/api/v1/events")
-    suspend fun events(): EventsResponse
+    suspend fun events(@Query("limit") limit: Int, @Query("offset") offset: Int?): EventsResponse
 
     @GET("/api/v1/users/info")
     suspend fun getUserInfo(@Header("Authorization") token: String): UserInfoResponse
