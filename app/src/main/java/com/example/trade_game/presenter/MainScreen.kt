@@ -58,6 +58,7 @@ import com.example.trade_game.domain.models.WebSocketMarketResponse
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.StockCard
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
@@ -82,7 +83,7 @@ fun MainView(navController: NavController, isGestureNavigation: Boolean, viewMod
 
     LaunchedEffect(Unit) {
         scope.launch {
-            viewModel.getUserInfo(preferencesManager)
+            viewModel.getUserInfo(preferencesManager.getUserData.first()?.get(0)!!.toInt())
             viewModel.userInfo.collectLatest { userInfo ->
                 userInfo?.data?.id?.let { userId ->
                     viewModel.getUserPlace(userId)

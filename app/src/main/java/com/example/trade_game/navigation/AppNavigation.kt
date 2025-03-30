@@ -18,6 +18,7 @@ import com.example.trade_game.presenter.PrivateChatScreen
 import com.example.trade_game.presenter.RegisterScreen
 import com.example.trade_game.presenter.StockScreen
 import com.example.trade_game.presenter.TopUsersScreen
+import com.example.trade_game.presenter.ProfileScreen
 
 @Composable
 fun AppNavigation(navController: NavHostController, startDestination: String, isGestureNavigation: Boolean) {
@@ -44,5 +45,10 @@ fun AppNavigation(navController: NavHostController, startDestination: String, is
                 stackEntry ->
             val assetId = stackEntry.arguments?.getInt("assetId")
             StockScreen(assetId!!, navController, isGestureNavigation) }
+        composable("Profile/{userId}", arguments =
+            listOf(navArgument("userId") { type = NavType.IntType } )) {
+                stackEntry ->
+            val userId = stackEntry.arguments?.getInt("userId")
+            ProfileScreen(userId!!, navController, isGestureNavigation) }
     }
 }

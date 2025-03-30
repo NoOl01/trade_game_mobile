@@ -41,7 +41,7 @@ interface RetrofitApi {
     suspend fun events(@Query("limit") limit: Int, @Query("offset") offset: Int?): EventsResponse
 
     @GET("/api/v1/users/info")
-    suspend fun getUserInfo(@Header("Authorization") token: String): UserInfoResponse
+    suspend fun getUserInfo(@Query("user_id") userId: Int): UserInfoResponse
 
     @GET("/api/v1/users/top")
     suspend fun getUsersTop(@Query("limit") limit: Int): UsersTopResponse

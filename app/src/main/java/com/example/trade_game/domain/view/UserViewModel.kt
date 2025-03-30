@@ -23,37 +23,35 @@ class UserViewModel : ViewModel() {
     private val _usersTop = MutableStateFlow<UsersTopResponse?>(null)
     val usersTop: StateFlow<UsersTopResponse?> = _usersTop.asStateFlow()
 
-    fun getUserInfo(preferencesManager: PreferencesManager) {
+    fun getUserInfo(userId: Int) {
         viewModelScope.launch {
             try {
-                val token = preferencesManager.getUserData.first()?.get(3)
-                if (token!!.isNotBlank()) {
-                    val result = RetrofitInstance.apiService.getUserInfo("Bearer $token")
-                    _userInfo.value = result
-                }
+                val result = RetrofitInstance.apiService.getUserInfo(userId)
+                _userInfo.value = result
+
             } catch (ex: Exception) {
                 _userInfo.value = UserInfoResponse("Error", null, ex.localizedMessage)
             }
         }
     }
 
-    fun getUserPlace(userId: Int){
+    fun getUserPlace(userId: Int) {
         viewModelScope.launch {
             try {
                 val result = RetrofitInstance.apiService.getUserPlace(userId)
                 _userPlace.value = result
-            } catch (ex: Exception){
+            } catch (ex: Exception) {
                 _userPlace.value = UserPlaceResponse("Error", null, ex.localizedMessage)
             }
         }
     }
 
-    fun getUsersTop(count: Int){
+    fun getUsersTop(count: Int) {
         viewModelScope.launch {
             try {
                 val result = RetrofitInstance.apiService.getUsersTop(count)
                 _usersTop.value = result
-            } catch (ex: Exception){
+            } catch (ex: Exception) {
                 _usersTop.value = UsersTopResponse("Error", emptyList(), ex.localizedMessage)
             }
         }

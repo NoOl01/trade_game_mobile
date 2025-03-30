@@ -38,6 +38,7 @@ import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.RatingCard
 import com.example.trade_game.presenter.components.RatingUserCard
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 
 @Composable
 fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, viewModel: UserViewModel = viewModel()) {
@@ -52,7 +53,7 @@ fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, v
 
     LaunchedEffect(Unit) {
         viewModel.getUsersTop(100)
-        viewModel.getUserInfo(preferencesManager)
+        viewModel.getUserInfo(preferencesManager.getUserData.first()?.get(0)!!.toInt())
         viewModel.userInfo.collectLatest { userInfo ->
             userInfo?.data?.id?.let { userId ->
                 viewModel.getUserPlace(userId)
