@@ -50,7 +50,7 @@ import androidx.navigation.NavController
 import com.example.trade_game.R
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
-import com.example.trade_game.data.web_sockets.WebSocketManager
+import com.example.trade_game.domain.web_sockets.WebSocketManager
 import com.example.trade_game.domain.BASE_URL
 import com.example.trade_game.domain.models.WebSocketMarketResponse
 import com.example.trade_game.domain.view.UserViewModel

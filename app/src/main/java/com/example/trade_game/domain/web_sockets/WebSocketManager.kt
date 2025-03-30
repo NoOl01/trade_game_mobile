@@ -1,4 +1,4 @@
-package com.example.trade_game.data.web_sockets
+package com.example.trade_game.domain.web_sockets
 
 import android.util.Log
 import okhttp3.OkHttpClient
