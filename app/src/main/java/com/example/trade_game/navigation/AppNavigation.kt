@@ -31,7 +31,6 @@ fun AppNavigation(navController: NavHostController, startDestination: String, is
         composable("EventsScreen") { EventsScreen(navController, isGestureNavigation) }
         composable("ChatsScreen") { ChatsScreen(navController, isGestureNavigation) }
         composable("MarketScreen") { MarketScreen(navController, isGestureNavigation) }
-        composable("StockScreen") { StockScreen(navController, isGestureNavigation) }
         composable("TopUsersScreen") { TopUsersScreen(navController, isGestureNavigation) }
         composable("LoginScreen") { LoginView(navController) }
         composable("RegisterScreen") { RegisterScreen(navController) }
@@ -40,5 +39,10 @@ fun AppNavigation(navController: NavHostController, startDestination: String, is
                 stackEntry ->
             val userId = stackEntry.arguments?.getInt("userId")
             PrivateChatScreen(userId!!, navController, isGestureNavigation) }
+        composable("StockScreen/{assetId}" , arguments =
+            listOf(navArgument("assetId") { type = NavType.IntType } )) {
+                stackEntry ->
+            val assetId = stackEntry.arguments?.getInt("assetId")
+            StockScreen(assetId!!, navController, isGestureNavigation) }
     }
 }

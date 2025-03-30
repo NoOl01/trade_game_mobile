@@ -51,7 +51,7 @@ fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
                 interactionSource = interactionSource,
                 indication = null
             ){
-                navController.navigate("StockScreen")
+                navController.navigate("StockScreen/${stock.id}")
             },
         shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
