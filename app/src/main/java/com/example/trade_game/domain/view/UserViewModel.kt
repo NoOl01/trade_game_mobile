@@ -26,7 +26,7 @@ class UserViewModel : ViewModel() {
     fun getUserInfo(preferencesManager: PreferencesManager) {
         viewModelScope.launch {
             try {
-                val token = preferencesManager.getUserData.first()?.get(2)
+                val token = preferencesManager.getUserData.first()?.get(3)
                 if (token!!.isNotBlank()) {
                     val result = RetrofitInstance.apiService.getUserInfo("Bearer $token")
                     _userInfo.value = result

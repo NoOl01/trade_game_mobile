@@ -26,7 +26,7 @@ class MarketViewModel : ViewModel() {
     fun marketSell(amount: Float, assetId: Int, preferencesManager: PreferencesManager) {
         viewModelScope.launch {
             try {
-                val token = preferencesManager.getUserData.first()?.get(2)
+                val token = preferencesManager.getUserData.first()?.get(3)
                 val newTrans = MarketTransactionRequest(
                     amount = amount,
                     asset_id = assetId
@@ -46,7 +46,7 @@ class MarketViewModel : ViewModel() {
     fun marketBuy(amount: Float, assetId: Int, preferencesManager: PreferencesManager) {
         viewModelScope.launch {
             try {
-                val token = preferencesManager.getUserData.first()?.get(2)
+                val token = preferencesManager.getUserData.first()?.get(3)
                 val newTrans = MarketTransactionRequest(
                     amount = amount,
                     asset_id = assetId

@@ -40,8 +40,7 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.mpandroidchart)
+    implementation("com.github.jaikeerthick:Composable-Graphs:v1.2.3")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

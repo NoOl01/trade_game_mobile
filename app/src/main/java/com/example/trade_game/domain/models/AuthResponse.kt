@@ -7,6 +7,7 @@ data class AuthResponse(
 )
 
 data class AuthData(
+    val user_id: Int,
     val access_token: String,
     val refresh_token: String,
     val email: String,

@@ -15,12 +15,12 @@ class PreferencesManager(private val context: Context){
     val getUserData: Flow<Array<String>?> = context.dataStore.data
         .map { preferences ->
             preferences[userKey]?.split("|")?.let {
-                if (it.size == 4) Array(4) { index -> it[index] } else null
-            } ?: Array(4) {" "}
+                if (it.size == 5) Array(5) { index -> it[index] } else null
+            } ?: Array(5) {" "}
         }
 
-    suspend fun saveUserData(email: String, userName: String, accessToken: String, refreshToken: String) {
-        val userData = "$email|$userName|$accessToken|$refreshToken"
+    suspend fun saveUserData(id: Int, email: String, userName: String, accessToken: String, refreshToken: String) {
+        val userData = "$id|$email|$userName|$accessToken|$refreshToken"
         context.dataStore.edit { preferences ->
             preferences[userKey] = userData
         }

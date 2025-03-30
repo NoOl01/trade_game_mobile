@@ -30,6 +30,7 @@ class AuthViewModel : ViewModel() {
                 val response = RetrofitInstance.apiService.register(newReg)
                 if (response.data != null && response.status == "Ok") {
                     preferencesManager.saveUserData(
+                        response.data.user_id,
                         response.data.email,
                         response.data.username,
                         response.data.access_token,
@@ -53,6 +54,7 @@ class AuthViewModel : ViewModel() {
 
                 if (response.data != null && response.status == "Ok") {
                     preferencesManager.saveUserData(
+                        response.data.user_id,
                         response.data.email,
                         response.data.username,
                         response.data.access_token,
@@ -79,11 +81,12 @@ class AuthViewModel : ViewModel() {
 
     fun refreshToken(preferencesManager: PreferencesManager) {
         viewModelScope.launch {
-            val token = preferencesManager.getUserData.first()?.get(3)
+            val token = preferencesManager.getUserData.first()?.get(4)
             if (token!!.isNotBlank()) {
                 val result = refresh(token)
                 result.data?.let {
                     preferencesManager.saveUserData(
+                        it.user_id,
                         it.email,
                         it.username,
                         it.access_token,
