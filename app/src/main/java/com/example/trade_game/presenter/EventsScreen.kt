@@ -58,13 +58,45 @@ fun EventsScreen(
         contentAlignment = Alignment.TopCenter
     ) {
         when {
-            events != null -> {
-                LazyColumn (
+            events != null && events!!.data.isNotEmpty() -> {
+                LazyColumn(
                     modifier = Modifier
                         .padding(top = 30.dp, bottom = ratingPadding)
                 ) {
                     items(events!!.data) { event ->
                         EventCard(event)
+                    }
+                }
+            }
+
+            events != null -> {
+                Box(
+                   modifier = Modifier.fillMaxSize(),
+                    contentAlignment= Alignment.Center
+                ) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .padding(horizontal = 20.dp, vertical = 20.dp),
+                        shape = RoundedCornerShape(30.dp),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.White),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Тут пока что ничего нет",
+                                fontSize = 40.sp,
+                                fontWeight = FontWeight.Bold,
+                                textAlign = TextAlign.Center,
+                                lineHeight = 35.sp,
+                                color = Color(0xFF2A41DA)
+                            )
+                        }
                     }
                 }
             }
@@ -83,11 +115,15 @@ fun EventCard(event: Event) {
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Box(
-            modifier = Modifier.fillMaxWidth().background(Color.White),
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White),
             contentAlignment = Alignment.TopCenter
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth(0.9f).padding(12.dp)
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .padding(12.dp)
             ) {
                 Text(
                     text = event.title,
