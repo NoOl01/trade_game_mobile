@@ -5,13 +5,16 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.trade_game.presenter.ChatsScreen
 import com.example.trade_game.presenter.EventsScreen
 import com.example.trade_game.presenter.LoginView
 import com.example.trade_game.presenter.MainView
 import com.example.trade_game.presenter.MarketScreen
+import com.example.trade_game.presenter.PrivateChatScreen
 import com.example.trade_game.presenter.RegisterScreen
 import com.example.trade_game.presenter.StockScreen
 import com.example.trade_game.presenter.TopUsersScreen
@@ -32,5 +35,10 @@ fun AppNavigation(navController: NavHostController, startDestination: String, is
         composable("TopUsersScreen") { TopUsersScreen(navController, isGestureNavigation) }
         composable("LoginScreen") { LoginView(navController) }
         composable("RegisterScreen") { RegisterScreen(navController) }
+        composable("Chat/{userId}", arguments =
+            listOf(navArgument("userId") { type = NavType.IntType } )) {
+                stackEntry ->
+            val userId = stackEntry.arguments?.getInt("userId")
+            PrivateChatScreen(userId!!, navController, isGestureNavigation) }
     }
 }

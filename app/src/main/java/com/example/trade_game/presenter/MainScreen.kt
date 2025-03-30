@@ -4,6 +4,8 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -67,6 +69,7 @@ fun MainView(navController: NavController, isGestureNavigation: Boolean, viewMod
     var error by remember { mutableStateOf(false) }
     var loading by remember { mutableStateOf(true) }
 
+    val interactionSource = remember { MutableInteractionSource() }
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
     val scope = rememberCoroutineScope()
@@ -195,7 +198,14 @@ fun MainView(navController: NavController, isGestureNavigation: Boolean, viewMod
                         text = "Место #${userPlace?.data?.place ?: "0"}",
                         color = Color(0xFF1641B7),
                         fontFamily = Montserrat,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .clickable (
+                                interactionSource = interactionSource,
+                                indication = null
+                            ) {
+                                navController.navigate("TopUsersScreen")
+                            }
                     )
                 }
             }
@@ -277,22 +287,6 @@ fun MainView(navController: NavController, isGestureNavigation: Boolean, viewMod
                         StockCard(stock, navController)
                     }
                     item {
-                        // Потом убрать
-                        Column (
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ){
-                            Text(
-                                "Тут костыль так как не знаю куда поставить кнопку для перехода",
-                                textAlign = TextAlign.Center,
-                                color = Color.Black
-                            )
-                            Button(onClick = {
-                                navController.navigate("TopUsersScreen")
-                            }) {
-                                Text("Топ игроков")
-                            }
-                        }
-                        // А спейсер не трогать (меню снизу будет закрывать последний элемент)
                         Spacer(Modifier.height(60.dp + ratingPadding))
                     }
                 }
