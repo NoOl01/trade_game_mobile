@@ -1,5 +1,9 @@
 package com.example.trade_game.presenter
 
+import android.annotation.SuppressLint
+import android.view.ViewGroup
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
@@ -15,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,9 +36,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.trade_game.common.Montserrat
+import com.example.trade_game.domain.BASE_URL
 import com.example.trade_game.domain.view.MarketViewModel
 import com.jaikeerthick.composable_graphs.composables.line.LineGraph
 import com.jaikeerthick.composable_graphs.composables.line.model.LineData
@@ -44,6 +52,7 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
+@SuppressLint("SetJavaScriptEnabled")
 @Composable
 fun StockScreen(
     assetId: Int,
@@ -55,84 +64,40 @@ fun StockScreen(
     val marketHistory by viewModel.marketHistory.collectAsState()
 
     var info by remember { mutableStateOf("") }
-    val paddingText = if (info == "") 0.dp else 10.dp
+    val ratingPadding = if (isGestureNavigation) 0.dp else 30.dp
 
-    LaunchedEffect(Unit) {
-        viewModel.getPriceHistory(assetId)
-        scrollState.animateScrollTo(scrollState.maxValue)
-    }
-
+    val mUrl = "https://$BASE_URL/?asset_id=$assetId"
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .padding(vertical = ratingPadding)
             .background(Color.White)
     ) {
-        Column(
+        Card(
             modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .height(500.dp)
+                .padding(horizontal = 20.dp, vertical = 10.dp),
+            shape = RoundedCornerShape(30.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
         ) {
-            marketHistory?.data?.let { history ->
-
-
-                val chartData = history.map { priceData ->
-                    val instant = Instant.ofEpochSecond(priceData.timestamp.toLong())
-                    val localDateTime = instant.atZone(ZoneId.systemDefault()).toLocalDateTime()
-                    val formated = DateTimeFormatter.ofPattern("HH:mm:ss")
-
-                    LineData(
-                        x = localDateTime.format(formated),
-                        y = priceData.price.toFloat()
+            AndroidView(factory = {
+                WebView(it).apply {
+                    settings.javaScriptEnabled = true
+                    settings.loadWithOverviewMode = true
+                    settings.useWideViewPort = true
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
                     )
+                    webViewClient = WebViewClient()
+                    loadUrl(mUrl)
                 }
-
-                Text(
-                    text = info,
-                    fontFamily = Montserrat,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp,
-                    color = Color.White,
-                    modifier = Modifier
-                        .background(
-                            Brush.horizontalGradient(listOf(
-                                Color(0xFF7E9AFF), Color(0xFF1641B7))
-                            ),
-                            shape = RoundedCornerShape(15.dp)
-                        )
-                        .padding(paddingText)
-                )
-
-                Spacer(Modifier.height(20.dp))
-
-                Row(
-                    modifier = Modifier
-                        .horizontalScroll(scrollState)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    LineGraph(
-                        modifier = Modifier
-                            .width(20000.dp)
-                            .padding(horizontal = 16.dp, vertical = 12.dp),
-                        data = chartData,
-                        onPointClick = { point ->
-                            info = "$${point.y}"
-                        },
-                        style = LineGraphStyle(
-                            colors = LineGraphColors(
-                                pointColor = Color(0xFF1641B7),
-                                lineColor = Color(0xFF1641B7),
-                                fillType = LineGraphFillType.Gradient(brush = Brush.verticalGradient(
-                                    listOf(Color(0xFF1641B7), Color.White))),
-                                clickHighlightColor = Color(0x771641B7),
-                                yAxisTextColor = Color.Black
-                            ),
-                            yAxisLabelPosition = LabelPosition.LEFT
-                        )
-                    )
-                }
-            }
+            }, update = {
+                it.loadUrl(mUrl)
+            }, modifier = Modifier
+                .fillMaxWidth()
+                .height(500.dp))
         }
     }
 }
