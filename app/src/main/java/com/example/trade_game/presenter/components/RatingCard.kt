@@ -20,11 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.domain.models.TopUser
 
 @Composable
-fun RatingCard(user: TopUser, index: Int){
+fun RatingCard(user: TopUser, index: Int, navController: NavController){
     val interactionSource = remember { MutableInteractionSource() }
     val ratingCardColor = when (index){
         1 -> Color(0xFF1641B7)
@@ -41,7 +42,7 @@ fun RatingCard(user: TopUser, index: Int){
                 interactionSource = interactionSource,
                 indication = null
             ){
-                //todo
+                navController.navigate("Profile/${user.id}")
             },
         colors = CardDefaults.cardColors(
             containerColor = ratingCardColor

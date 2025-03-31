@@ -2,8 +2,10 @@ package com.example.trade_game.domain.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.RetrofitInstance
+import com.example.trade_game.domain.models.UserAssetsResponse
 import com.example.trade_game.domain.models.UserInfoResponse
 import com.example.trade_game.domain.models.UserPlaceResponse
 import com.example.trade_game.domain.models.UsersTopResponse
@@ -22,6 +24,9 @@ class UserViewModel : ViewModel() {
 
     private val _usersTop = MutableStateFlow<UsersTopResponse?>(null)
     val usersTop: StateFlow<UsersTopResponse?> = _usersTop.asStateFlow()
+
+    private val _userAssets = MutableStateFlow<UserAssetsResponse?>(null)
+    val usersAssets: StateFlow<UserAssetsResponse?> = _userAssets.asStateFlow()
 
     fun getUserInfo(userId: Int) {
         viewModelScope.launch {
@@ -53,6 +58,17 @@ class UserViewModel : ViewModel() {
                 _usersTop.value = result
             } catch (ex: Exception) {
                 _usersTop.value = UsersTopResponse("Error", emptyList(), ex.localizedMessage)
+            }
+        }
+    }
+
+    fun getUserAssets(userId: Int){
+        viewModelScope.launch {
+            try {
+                val result = RetrofitInstance.apiService.getUserAssets(userId)
+                _userAssets.value = result
+            } catch (ex: Exception){
+                _userAssets.value = UserAssetsResponse("Error", emptyList(), ex.localizedMessage)
             }
         }
     }

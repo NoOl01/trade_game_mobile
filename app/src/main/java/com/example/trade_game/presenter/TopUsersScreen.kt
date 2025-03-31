@@ -104,7 +104,7 @@ fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, v
                             Spacer(Modifier.height(20.dp))
                         }
                         itemsIndexed(userList) { index, user ->
-                            RatingCard(user, index + 1)
+                            RatingCard(user, index + 1, navController)
                         }
                     }
                 }
