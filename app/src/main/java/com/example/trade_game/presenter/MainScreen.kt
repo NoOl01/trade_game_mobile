@@ -1,6 +1,5 @@
 package com.example.trade_game.presenter
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -29,10 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,68 +43,35 @@ import androidx.navigation.NavController
 import com.example.trade_game.R
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
-import com.example.trade_game.domain.BASE_URL
-import com.example.trade_game.domain.models.WebSocketMarketResponse
 import com.example.trade_game.domain.view.UserViewModel
-import com.example.trade_game.domain.web_sockets.WebSocketManager
-import com.example.trade_game.presenter.components.StockCard
+import com.example.trade_game.presenter.components.UserAssetCard
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 
 @Composable
-fun MainView(navController: NavController, isGestureNavigation: Boolean, viewModel: UserViewModel = viewModel()) {
-    var stocks by remember { mutableStateOf<List<WebSocketMarketResponse>>(emptyList()) }
-
-    var error by remember { mutableStateOf(false) }
-    var loading by remember { mutableStateOf(true) }
-
+fun MainView(
+    navController: NavController,
+    isGestureNavigation: Boolean,
+    viewModel: UserViewModel = viewModel()
+) {
     val interactionSource = remember { MutableInteractionSource() }
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
     val scope = rememberCoroutineScope()
     val userInfo by viewModel.userInfo.collectAsState()
     val userPlace by viewModel.userPlace.collectAsState()
+    val userAssets by viewModel.usersAssets.collectAsState()
 
-    val ratingPadding = if (isGestureNavigation) 0.dp else 30.dp
-
-    val webSocketManager = remember { WebSocketManager("wss://${BASE_URL}/api/v1/market/data") }
-
+    val ratingPadding = if (isGestureNavigation) 0.dp else 70.dp
     LaunchedEffect(Unit) {
         scope.launch {
             viewModel.getUserInfo(preferencesManager.getUserData.first()?.get(0)!!.toInt())
+            viewModel.getUserAssets(preferencesManager.getUserData.first()?.get(0)!!.toInt())
             viewModel.userInfo.collectLatest { userInfo ->
                 userInfo?.data?.id?.let { userId ->
                     viewModel.getUserPlace(userId)
                 }
-            }
-        }
-        webSocketManager.connect { jsonMessage ->
-            try {
-                val jsonObject = JSONObject(jsonMessage)
-
-                val stockList = mutableListOf<WebSocketMarketResponse>()
-
-                for (key in jsonObject.keys()) {
-                    val stockJson = jsonObject.getJSONObject(key)
-                    val stock = WebSocketMarketResponse(
-                        id = key.toInt(),
-                        symbol = stockJson.getString("symbol"),
-                        name = stockJson.getString("name"),
-                        price = stockJson.getString("price"),
-                        trend = stockJson.getString("trend"),
-                        changePercent = stockJson.getString("change_percent")
-                    )
-                    stockList.add(stock)
-                }
-
-                stocks = stockList.sortedBy { it.id }
-                loading = false
-                Log.d("WebSocket", "Parsed stocks: $stocks")
-            } catch (e: Exception) {
-                error = true
-                Log.e("WebSocket", "Error parsing JSON", e)
             }
         }
     }
@@ -136,7 +99,9 @@ fun MainView(navController: NavController, isGestureNavigation: Boolean, viewMod
                 )
             }
             Row(
-                modifier = Modifier.padding(horizontal = 24.dp).padding(bottom = 24.dp),
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .padding(bottom = 24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -158,7 +123,7 @@ fun MainView(navController: NavController, isGestureNavigation: Boolean, viewMod
                         fontFamily = Montserrat,
                         fontSize = 14.sp,
                         modifier = Modifier
-                            .clickable (
+                            .clickable(
                                 interactionSource = interactionSource,
                                 indication = null
                             ) {
@@ -229,23 +194,13 @@ fun MainView(navController: NavController, isGestureNavigation: Boolean, viewMod
                 }
             }
             Spacer(Modifier.height(20.dp))
-            if (loading){
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ){
-                    CircularProgressIndicator(
-                        color = Color(0xFF1641B7)
-                    )
-                }
-
-            } else {
+            userAssets?.data?.let { assets ->
                 LazyColumn {
-                    items(stocks) { stock ->
-                        StockCard(stock, navController)
+                    items(assets) { asset ->
+                        UserAssetCard(asset, navController)
                     }
                     item {
-                        Spacer(Modifier.height(60.dp + ratingPadding))
+                        Spacer(Modifier.height(ratingPadding))
                     }
                 }
             }

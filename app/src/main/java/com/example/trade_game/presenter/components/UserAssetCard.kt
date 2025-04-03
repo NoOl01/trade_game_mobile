@@ -105,7 +105,7 @@ fun UserAssetCard(stock: UserAsset, navController: NavController) {
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "$${stock.amount}",
+                            text = stock.amount,
                             fontSize = 20.sp,
                             modifier = Modifier.height(20.dp),
                             fontFamily = Montserrat,
