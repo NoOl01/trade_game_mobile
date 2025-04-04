@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -74,27 +75,32 @@ fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, v
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                Row(
-                    modifier = Modifier.fillMaxWidth(0.7f),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min),
+                    contentAlignment = Alignment.Center
                 ) {
-                    IconButton(onClick = {
+                    Text(
+                        text = "Рейтинг",
+                        color = Color(0xFF1641B7),
+                        fontFamily = Montserrat,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 30.sp,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                    IconButton(
+                        modifier = Modifier.align(Alignment.CenterStart),
+                        onClick = {
                         navController.navigate("MainScreen")
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.cross),
                             contentDescription = "Выйти",
                             tint = Color(0xFF1641B7)
+
                         )
                     }
-                    Text(
-                        text = "Рейтинг",
-                        color = Color(0xFF1641B7),
-                        fontFamily = Montserrat,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 30.sp
-                    )
                 }
                 usersTop?.data?.let { userList ->
                     LazyColumn (

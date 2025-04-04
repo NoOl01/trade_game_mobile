@@ -28,7 +28,7 @@ import org.json.JSONObject
 
 @Composable
 fun MarketScreen(navController: NavController, isGestureNavigation: Boolean) {
-    val ratingPadding = if (isGestureNavigation) 0.dp else 30.dp
+    val padding = if (isGestureNavigation) 0.dp else 30.dp
 
     val webSocketManager = remember { WebSocketManager("wss://${BASE_URL}/api/v1/market/data") }
     var stocks by remember { mutableStateOf<List<WebSocketMarketResponse>>(emptyList()) }
@@ -68,7 +68,7 @@ fun MarketScreen(navController: NavController, isGestureNavigation: Boolean) {
 
     Box(
         modifier = Modifier
-            .padding(top = ratingPadding)
+            .padding(top = 34.dp, bottom = padding)
             .fillMaxSize()
     ) {
         if (loading) {
@@ -87,7 +87,7 @@ fun MarketScreen(navController: NavController, isGestureNavigation: Boolean) {
                     StockCard(stock, navController)
                 }
                 item {
-                    Spacer(Modifier.height(60.dp + ratingPadding))
+                    Spacer(Modifier.height(60.dp + padding))
                 }
             }
         }

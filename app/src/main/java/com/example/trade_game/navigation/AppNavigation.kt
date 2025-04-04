@@ -21,7 +21,11 @@ import com.example.trade_game.presenter.TopUsersScreen
 import com.example.trade_game.presenter.ProfileScreen
 
 @Composable
-fun AppNavigation(navController: NavHostController, startDestination: String, isGestureNavigation: Boolean) {
+fun AppNavigation(
+    navController: NavHostController,
+    startDestination: String,
+    isGestureNavigation: Boolean
+) {
     NavHost(
         navController, startDestination = startDestination,
         enterTransition = { fadeIn(animationSpec = tween(0)) },
@@ -35,20 +39,29 @@ fun AppNavigation(navController: NavHostController, startDestination: String, is
         composable("TopUsersScreen") { TopUsersScreen(navController, isGestureNavigation) }
         composable("LoginScreen") { LoginView(navController) }
         composable("RegisterScreen") { RegisterScreen(navController) }
-        composable("Chat/{userId}", arguments =
-            listOf(navArgument("userId") { type = NavType.IntType } )) {
-                stackEntry ->
+        composable(
+            "Chat/{userId}/{userName}", arguments =
+                listOf(
+                    navArgument("userId") { type = NavType.IntType },
+                    navArgument("userName") { type = NavType.StringType })
+        ) { stackEntry ->
             val userId = stackEntry.arguments?.getInt("userId")
-            PrivateChatScreen(userId!!, navController, isGestureNavigation) }
-        composable("StockScreen/{assetId}" , arguments =
-            listOf(navArgument("assetId") { type = NavType.IntType } )) {
-                stackEntry ->
+            val userName = stackEntry.arguments?.getString("userName")
+            PrivateChatScreen(userId!!, userName!!, navController, isGestureNavigation)
+        }
+        composable(
+            "StockScreen/{assetId}/{assetName}", arguments =
+            listOf(navArgument("assetId") { type = NavType.IntType },
+                navArgument("assetName") {type = NavType.StringType})) { stackEntry ->
             val assetId = stackEntry.arguments?.getInt("assetId")
-            StockScreen(assetId!!, navController, isGestureNavigation) }
-        composable("Profile/{userId}", arguments =
-            listOf(navArgument("userId") { type = NavType.IntType } )) {
-                stackEntry ->
+            val assetName = stackEntry.arguments?.getString("assetName")
+            StockScreen(assetId!!, assetName!!, navController, isGestureNavigation)
+        }
+        composable(
+            "Profile/{userId}", arguments =
+            listOf(navArgument("userId") { type = NavType.IntType })) { stackEntry ->
             val userId = stackEntry.arguments?.getInt("userId")
-            ProfileScreen(userId!!, navController, isGestureNavigation) }
+            ProfileScreen(userId!!, navController, isGestureNavigation)
+        }
     }
 }

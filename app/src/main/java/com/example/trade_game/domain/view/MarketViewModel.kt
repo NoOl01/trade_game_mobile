@@ -1,5 +1,6 @@
 package com.example.trade_game.domain.view
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trade_game.data.PreferencesManager
@@ -35,6 +36,7 @@ class MarketViewModel : ViewModel() {
                     marketTransaction = newTrans,
                     token = "Bearer $token"
                 )
+
                 _marketSell.value = response
 
             } catch (ex: Exception) {
@@ -55,10 +57,10 @@ class MarketViewModel : ViewModel() {
                     marketTransaction = newTrans,
                     token = "Bearer $token"
                 )
-                _marketSell.value = response
+                _marketBuy.value = response
 
             } catch (ex: Exception) {
-                _marketSell.value = MarketTransactionResponse("Error", null, ex.localizedMessage)
+                _marketBuy.value = MarketTransactionResponse("Error", null, ex.localizedMessage)
             }
         }
     }

@@ -44,7 +44,7 @@ fun UserAssetCard(stock: UserAsset, navController: NavController) {
                 interactionSource = interactionSource,
                 indication = null
             ){
-                navController.navigate("StockScreen/${stock.id}")
+                navController.navigate("StockScreen/${stock.id}/${stock.name}")
             },
         shape = RoundedCornerShape(15.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)

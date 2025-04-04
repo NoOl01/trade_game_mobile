@@ -138,7 +138,11 @@ fun ProfileScreen(
                 IconButton(
                     modifier = Modifier
                         .background(color = Color(0xFF1641B7), shape = RoundedCornerShape(15.dp)),
-                    onClick = {}
+                    onClick = {
+                        userInfo?.data?.let { user ->
+                            navController.navigate("Chat/${user.id}/${user.username}")
+                        }
+                    }
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.messages),

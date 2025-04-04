@@ -63,7 +63,7 @@ fun MainView(
     val userPlace by viewModel.userPlace.collectAsState()
     val userAssets by viewModel.usersAssets.collectAsState()
 
-    val ratingPadding = if (isGestureNavigation) 0.dp else 70.dp
+    val padding = if (isGestureNavigation) 0.dp else 70.dp
     LaunchedEffect(Unit) {
         scope.launch {
             viewModel.getUserInfo(preferencesManager.getUserData.first()?.get(0)!!.toInt())
@@ -200,7 +200,7 @@ fun MainView(
                         UserAssetCard(asset, navController)
                     }
                     item {
-                        Spacer(Modifier.height(ratingPadding))
+                        Spacer(Modifier.height( 60.dp + padding))
                     }
                 }
             }

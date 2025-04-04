@@ -2,6 +2,7 @@ package com.example.trade_game.domain
 
 import com.example.trade_game.domain.models.AuthResponse
 import com.example.trade_game.domain.models.CancelOrderResponse
+import com.example.trade_game.domain.models.ChatHistoryResponse
 import com.example.trade_game.domain.models.ChatsResponse
 import com.example.trade_game.domain.models.CreateOrderResponse
 import com.example.trade_game.domain.models.EventsResponse
@@ -117,5 +118,5 @@ interface RetrofitApi {
     suspend fun getChatsList(@Header("Authorization") token: String): ChatsResponse
 
     @GET("/api/v1/chat/history/{user_id}")
-    suspend fun getChatHistory(@Header("Authorization") token: String, @Path("user_id") userId: Int, @Query("limit") limit: Int, @Query("before_message_id") messageId: Int)
+    suspend fun getChatHistory(@Header("Authorization") token: String, @Path("user_id") userId: Int, @Query("limit") limit: Int, @Query("before_message_id") messageId: Int) : ChatHistoryResponse
 }
