@@ -51,6 +51,7 @@ import com.example.trade_game.common.Montserrat
 import com.example.trade_game.common.isValidEmail
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.AuthViewModel
+import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -80,7 +81,7 @@ fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = view
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1641B7)),
+            .background(Primary),
         contentAlignment = Alignment.Center
     ) {
         Column(

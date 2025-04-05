@@ -40,6 +40,7 @@ import com.example.trade_game.R
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.UserAssetCard
+import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -88,7 +89,7 @@ fun ProfileScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.cross),
                         contentDescription = "Выйти",
-                        tint = Color(0xFF1641B7)
+                        tint = Primary
                     )
                 }
                 Text(
@@ -96,7 +97,7 @@ fun ProfileScreen(
                     fontFamily = Montserrat,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1641B7)
+                    color = Primary
                 )
             }
             Row(
@@ -122,7 +123,7 @@ fun ProfileScreen(
                         )
                         Text(
                             text = "Место #${userPlace?.data?.place ?: "0"}",
-                            color = Color(0xFF1641B7),
+                            color = Primary,
                             fontFamily = Montserrat,
                             fontSize = 14.sp,
                             modifier = Modifier
@@ -137,7 +138,7 @@ fun ProfileScreen(
                 }
                 IconButton(
                     modifier = Modifier
-                        .background(color = Color(0xFF1641B7), shape = RoundedCornerShape(15.dp)),
+                        .background(color = Primary, shape = RoundedCornerShape(15.dp)),
                     onClick = {
                         userInfo?.data?.let { user ->
                             navController.navigate("Chat/${user.id}/${user.username}")
@@ -170,7 +171,7 @@ fun ProfileScreen(
                             .fillMaxWidth(0.6f)
                             .fillMaxHeight()
                             .clip(RoundedCornerShape(topEnd = 15.dp))
-                            .background(Color(0xFF1641B7))
+                            .background(Primary)
 
                     )
                     Box(
@@ -189,7 +190,7 @@ fun ProfileScreen(
                                 topEnd = 20.dp
                             )
                         )
-                        .background(Color(0xFF1641B7)),
+                        .background(Primary),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(

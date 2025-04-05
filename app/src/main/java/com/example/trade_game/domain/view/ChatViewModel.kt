@@ -34,12 +34,12 @@ class ChatViewModel : ViewModel() {
         }
     }
 
-    fun getChatHistory(preferencesManager: PreferencesManager, userId: Int, beforeMessageId: Int, limit: Int){
+    fun getChatHistory(preferencesManager: PreferencesManager, userId: Int, beforeMessageId: Int?, limit: Int){
         viewModelScope.launch {
             try {
                 val token = preferencesManager.getUserData.first()?.get(3)
                 if (token!!.isNotBlank()) {
-                    val result = RetrofitInstance.apiService.getChatHistory("Bearer $token", userId, beforeMessageId, limit)
+                    val result = RetrofitInstance.apiService.getChatHistory("Bearer $token", userId, limit, beforeMessageId)
                     _chatHistory.value = result
                 }
             } catch (ex: Exception) {

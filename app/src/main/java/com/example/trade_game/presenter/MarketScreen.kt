@@ -24,6 +24,7 @@ import com.example.trade_game.domain.BASE_URL
 import com.example.trade_game.domain.models.WebSocketMarketResponse
 import com.example.trade_game.domain.web_sockets.WebSocketManager
 import com.example.trade_game.presenter.components.StockCard
+import com.example.trade_game.ui.theme.Primary
 import org.json.JSONObject
 
 @Composable
@@ -77,7 +78,7 @@ fun MarketScreen(navController: NavController, isGestureNavigation: Boolean) {
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
-                    color = Color(0xFF1641B7)
+                    color = Primary
                 )
             }
 

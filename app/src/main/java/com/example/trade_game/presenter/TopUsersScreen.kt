@@ -38,6 +38,7 @@ import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.RatingCard
 import com.example.trade_game.presenter.components.RatingUserCard
+import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 
@@ -83,7 +84,7 @@ fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, v
                 ) {
                     Text(
                         text = "Рейтинг",
-                        color = Color(0xFF1641B7),
+                        color = Primary,
                         fontFamily = Montserrat,
                         fontWeight = FontWeight.Bold,
                         fontSize = 30.sp,
@@ -97,7 +98,7 @@ fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, v
                         Icon(
                             painter = painterResource(id = R.drawable.cross),
                             contentDescription = "Выйти",
-                            tint = Color(0xFF1641B7)
+                            tint = Primary
 
                         )
                     }

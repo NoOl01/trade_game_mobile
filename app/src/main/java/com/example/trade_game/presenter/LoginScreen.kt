@@ -49,6 +49,7 @@ import com.example.trade_game.common.HeliosExtC
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.AuthViewModel
+import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -69,7 +70,7 @@ fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF1641B7)),
+            .background(Primary),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -246,7 +247,7 @@ fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel
             Box(
                 Modifier
                     .fillMaxSize()
-                    .background(Color(0xFF1641B7)),
+                    .background(Primary),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(

@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import com.example.trade_game.R
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.domain.models.WebSocketMarketResponse
+import com.example.trade_game.ui.theme.Primary
 
 @Composable
 fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
@@ -59,7 +60,7 @@ fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF1641B7)),
+                .background(Primary),
             contentAlignment = Alignment.CenterStart
         ) {
             Row (
@@ -81,7 +82,7 @@ fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
                             .width(70.dp)
                             .height(40.dp)
                             .clip(RoundedCornerShape(15.dp))
-                            .background(Color(0xFF1641B7)),
+                            .background(Primary),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
@@ -103,7 +104,7 @@ fun StockCard(stock: WebSocketMarketResponse, navController: NavController) {
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFF1641B7)),
+                        .background(Primary),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {

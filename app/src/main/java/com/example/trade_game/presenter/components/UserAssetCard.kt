@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.domain.models.UserAsset
+import com.example.trade_game.ui.theme.Primary
 
 @Composable
 fun UserAssetCard(stock: UserAsset, navController: NavController) {
@@ -52,7 +53,7 @@ fun UserAssetCard(stock: UserAsset, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFF1641B7)),
+                .background(Primary),
             contentAlignment = Alignment.CenterStart
         ) {
             Row (
@@ -74,7 +75,7 @@ fun UserAssetCard(stock: UserAsset, navController: NavController) {
                             .width(70.dp)
                             .height(40.dp)
                             .clip(RoundedCornerShape(15.dp))
-                            .background(Color(0xFF1641B7)),
+                            .background(Primary),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
@@ -96,7 +97,7 @@ fun UserAssetCard(stock: UserAsset, navController: NavController) {
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Color(0xFF1641B7)),
+                        .background(Primary),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {

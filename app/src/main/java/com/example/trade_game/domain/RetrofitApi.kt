@@ -118,5 +118,5 @@ interface RetrofitApi {
     suspend fun getChatsList(@Header("Authorization") token: String): ChatsResponse
 
     @GET("/api/v1/chat/history/{user_id}")
-    suspend fun getChatHistory(@Header("Authorization") token: String, @Path("user_id") userId: Int, @Query("limit") limit: Int, @Query("before_message_id") messageId: Int) : ChatHistoryResponse
+    suspend fun getChatHistory(@Header("Authorization") token: String, @Path("user_id") userId: Int, @Query("limit") limit: Int, @Query("before_message_id") messageId: Int?) : ChatHistoryResponse
 }

@@ -23,12 +23,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.domain.models.TopUser
+import com.example.trade_game.ui.theme.Primary
 
 @Composable
 fun RatingCard(user: TopUser, index: Int, navController: NavController){
     val interactionSource = remember { MutableInteractionSource() }
     val ratingCardColor = when (index){
-        1 -> Color(0xFF1641B7)
+        1 -> Primary
         2 -> Color(0xFF4C68B4)
         3 -> Color(0xFF60709C)
         else -> Color(0xFF7F7F7F)
@@ -89,7 +90,7 @@ fun RatingUserCard(name: String, balance: String, place: Int){
             .fillMaxWidth()
             .padding(horizontal = 10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color(0xFF1641B7)
+            containerColor = Primary
         )
     ) {
         Row (

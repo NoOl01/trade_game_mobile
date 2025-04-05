@@ -51,6 +51,7 @@ import com.example.trade_game.common.NoScrollWebView
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.BASE_URL
 import com.example.trade_game.domain.view.MarketViewModel
+import com.example.trade_game.ui.theme.Primary
 
 @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
 @Composable
@@ -105,7 +106,7 @@ fun StockScreen(
                     text = assetName,
                     fontSize = 30.sp,
                     fontFamily = Montserrat,
-                    color = Color(0xFF1641B7),
+                    color = Primary,
                     modifier = Modifier.align(Alignment.Center)
                 )
 
@@ -118,7 +119,7 @@ fun StockScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.cross),
                         contentDescription = "Закрыть",
-                        tint = Color(0xFF1641B7)
+                        tint = Primary
                     )
                 }
             }
@@ -181,7 +182,7 @@ fun StockScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     placeholder = { Text("Количество акций") },
                     shape = RoundedCornerShape(15.dp),
-                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Color(0xFF1641B7), unfocusedBorderColor = Color(0xFF1641B7))
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Primary, unfocusedBorderColor = Primary)
                 )
                 Spacer(Modifier.height(20.dp))
                 Row(
@@ -190,9 +191,9 @@ fun StockScreen(
                 ) {
                     OutlinedButton(
                         colors = ButtonColors(
-                            containerColor = Color(0xFF1641B7),
+                            containerColor = Primary,
                             contentColor = Color.White,
-                            disabledContainerColor = Color(0xFF1641B7),
+                            disabledContainerColor = Primary,
                             disabledContentColor = Color.White
                         ),
                         onClick = {
@@ -209,9 +210,9 @@ fun StockScreen(
                     Spacer(Modifier.width(20.dp))
                     OutlinedButton(
                         colors = ButtonColors(
-                            containerColor = Color(0xFF1641B7),
+                            containerColor = Primary,
                             contentColor = Color.White,
-                            disabledContainerColor = Color(0xFF1641B7),
+                            disabledContainerColor = Primary,
                             disabledContentColor = Color.White
                         ),
                         onClick = {

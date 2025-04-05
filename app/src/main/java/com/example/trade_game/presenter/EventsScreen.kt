@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.trade_game.common.formatDateTime
 import com.example.trade_game.domain.models.Event
 import com.example.trade_game.domain.view.EventsViewModel
 import kotlinx.coroutines.launch
@@ -147,9 +148,3 @@ fun EventCard(event: Event) {
 
 }
 
-fun formatDateTime(dateTimeString: String): String {
-    val inputFormatter = DateTimeFormatter.ISO_DATE_TIME
-    val outputFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")
-    val dateTime = LocalDateTime.parse(dateTimeString, inputFormatter)
-    return dateTime.format(outputFormatter)
-}

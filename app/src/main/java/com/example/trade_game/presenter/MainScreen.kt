@@ -45,6 +45,7 @@ import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.UserAssetCard
+import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -95,7 +96,7 @@ fun MainView(
                 Icon(
                     Icons.Default.Settings,
                     contentDescription = "Настройки",
-                    tint = Color(0xFF1641B7)
+                    tint = Primary
                 )
             }
             Row(
@@ -119,7 +120,7 @@ fun MainView(
                     )
                     Text(
                         text = "Место #${userPlace?.data?.place ?: "0"}",
-                        color = Color(0xFF1641B7),
+                        color = Primary,
                         fontFamily = Montserrat,
                         fontSize = 14.sp,
                         modifier = Modifier
@@ -151,7 +152,7 @@ fun MainView(
                             .fillMaxWidth(0.6f)
                             .fillMaxHeight()
                             .clip(RoundedCornerShape(topEnd = 15.dp))
-                            .background(Color(0xFF1641B7))
+                            .background(Primary)
 
                     )
                     Box(
@@ -170,7 +171,7 @@ fun MainView(
                                 topEnd = 20.dp
                             )
                         )
-                        .background(Color(0xFF1641B7)),
+                        .background(Primary),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
