@@ -3,7 +3,7 @@ package com.example.trade_game.domain
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val BASE_URL = "bkhsi7g1tv9q.share.zrok.io"
+const val BASE_URL = "baldezh.twc1.net"
 
 object RetrofitInstance {
 

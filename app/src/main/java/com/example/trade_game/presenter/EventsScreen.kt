@@ -31,9 +31,8 @@ import androidx.navigation.NavController
 import com.example.trade_game.common.formatDateTime
 import com.example.trade_game.domain.models.Event
 import com.example.trade_game.domain.view.EventsViewModel
+import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Composable
 fun EventsScreen(
@@ -95,7 +94,7 @@ fun EventsScreen(
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center,
                                 lineHeight = 35.sp,
-                                color = Color(0xFF2A41DA)
+                                color = Primary
                             )
                         }
                     }

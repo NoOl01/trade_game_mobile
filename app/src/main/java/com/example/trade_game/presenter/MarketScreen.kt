@@ -3,7 +3,9 @@ package com.example.trade_game.presenter
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -83,7 +85,7 @@ fun MarketScreen(navController: NavController, isGestureNavigation: Boolean) {
             }
 
         } else {
-            LazyColumn {
+            LazyColumn() {
                 items(stocks) { stock ->
                     StockCard(stock, navController)
                 }

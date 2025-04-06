@@ -82,7 +82,7 @@ fun Main(viewModel: AuthViewModel = viewModel()) {
                 bottomBar = {
                     if (currentRoute in listOf("MainScreen", "EventsScreen", "MarketScreen", "ChatsScreen")) {
                         Box(
-                            modifier = Modifier.padding(bottom = if (isGestureNavigation) 0.dp else 28.dp) // Поднимаем BottomBar
+                            modifier = Modifier.padding(bottom = if (isGestureNavigation) 0.dp else 28.dp)
                         ) {
                             BottomBar(navController = navController)
                         }

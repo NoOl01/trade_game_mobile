@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -30,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,10 +40,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.trade_game.R
 import com.example.trade_game.common.Montserrat
+import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.UserAssetCard
 import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun ProfileScreen(
@@ -57,6 +62,10 @@ fun ProfileScreen(
 
     val ratingPadding = if (isGestureNavigation) 0.dp else 30.dp
 
+    val context = LocalContext.current
+    val preferencesManager = remember { PreferencesManager(context) }
+    val selfUserId = runBlocking { preferencesManager.getUserData.first()?.get(0)!!.toInt() }
+
     LaunchedEffect(Unit) {
         viewModel.getUserInfo(userId)
         viewModel.getUserAssets(userId)
@@ -65,6 +74,7 @@ fun ProfileScreen(
                 viewModel.getUserPlace(userId)
             }
         }
+
     }
 
     Box(
@@ -136,20 +146,22 @@ fun ProfileScreen(
                         )
                     }
                 }
-                IconButton(
-                    modifier = Modifier
-                        .background(color = Primary, shape = RoundedCornerShape(15.dp)),
-                    onClick = {
-                        userInfo?.data?.let { user ->
-                            navController.navigate("Chat/${user.id}/${user.username}")
+                if (userId != selfUserId) {
+                    IconButton(
+                        modifier = Modifier
+                            .background(color = Primary, shape = RoundedCornerShape(15.dp)),
+                        onClick = {
+                            userInfo?.data?.let { user ->
+                                navController.navigate("Chat/${user.id}/${user.username}")
+                            }
                         }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.messages),
+                            contentDescription = "Написать",
+                            tint = Color.White
+                        )
                     }
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.messages),
-                        contentDescription = "Написать",
-                        tint = Color.White
-                    )
                 }
             }
             Column(

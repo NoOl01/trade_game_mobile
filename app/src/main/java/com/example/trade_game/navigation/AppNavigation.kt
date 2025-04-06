@@ -19,6 +19,7 @@ import com.example.trade_game.presenter.RegisterScreen
 import com.example.trade_game.presenter.StockScreen
 import com.example.trade_game.presenter.TopUsersScreen
 import com.example.trade_game.presenter.ProfileScreen
+import com.example.trade_game.presenter.SettingsScreen
 
 @Composable
 fun AppNavigation(
@@ -63,5 +64,6 @@ fun AppNavigation(
             val userId = stackEntry.arguments?.getInt("userId")
             ProfileScreen(userId!!, navController, isGestureNavigation)
         }
+        composable("SettingsScreen") { SettingsScreen(navController, isGestureNavigation) }
     }
 }

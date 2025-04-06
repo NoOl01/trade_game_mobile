@@ -1,5 +1,6 @@
 package com.example.trade_game.presenter
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,6 +21,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -36,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -91,7 +96,9 @@ fun MainView(
         ) {
             IconButton(
                 modifier = Modifier.align(Alignment.End),
-                onClick = {}
+                onClick = {
+                    navController.navigate("SettingsScreen")
+                }
             ) {
                 Icon(
                     Icons.Default.Settings,
@@ -195,16 +202,62 @@ fun MainView(
                 }
             }
             Spacer(Modifier.height(20.dp))
-            userAssets?.data?.let { assets ->
-                LazyColumn {
-                    items(assets) { asset ->
-                        UserAssetCard(asset, navController)
-                    }
-                    item {
-                        Spacer(Modifier.height( 60.dp + padding))
+            when {
+                userAssets != null && userAssets!!.data.isNotEmpty() -> {
+                    userAssets?.data?.let { assets ->
+                        LazyColumn {
+                            items(assets) { asset ->
+                                UserAssetCard(asset, navController)
+                            }
+                            item {
+                                Spacer(Modifier.height(60.dp + padding))
+                            }
+                        }
                     }
                 }
+
+                userAssets == null || userAssets!!.data.isEmpty() -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.TopCenter
+                    ) {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth(0.8f)
+                                .height(200.dp),
+                            colors = CardColors(
+                                containerColor = Color.White,
+                                contentColor = Primary,
+                                disabledContainerColor = Color.White,
+                                disabledContentColor = Primary
+                            ),
+                            border = BorderStroke(2.dp, Primary)
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = "У вас пока что\n нет акций :(",
+                                    textAlign = TextAlign.Center,
+                                    fontSize = 24.sp
+
+                                )
+                                Spacer(Modifier.height(20.dp))
+                                ElevatedButton(
+                                    onClick = { navController.navigate("MarketScreen") }
+                                ) {
+                                    Text(text = "Купить")
+                                }
+                            }
+                        }
+                    }
+
+                }
+
             }
+
         }
     }
 }

@@ -18,7 +18,6 @@ class WebSocketManager(private val url: String) {
 
             override fun onMessage(webSocket: WebSocket, text: String) {
                 onMessageReceived(text)
-                Log.d("webSockets", "message: $text")
             }
 
             override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
@@ -26,13 +25,10 @@ class WebSocketManager(private val url: String) {
                 onMessageReceived(text)
             }
 
-            override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                Log.d("webSockets", "${t.message}")
-            }
+            override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {}
 
             override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
                 webSocket.close(1000, null)
-                Log.d("webSockets", "closed. Reason: $reason, Code: $code")
             }
         })
     }
