@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.ElevatedButton
@@ -246,6 +247,12 @@ fun MainView(
                                 )
                                 Spacer(Modifier.height(20.dp))
                                 ElevatedButton(
+                                    colors = ButtonColors(
+                                        containerColor = Color(0xFFE3E3E3),
+                                        contentColor = Primary,
+                                        disabledContainerColor = Color(0xFFE3E3E3),
+                                        disabledContentColor = Primary
+                                    ),
                                     onClick = { navController.navigate("MarketScreen") }
                                 ) {
                                     Text(text = "Купить")

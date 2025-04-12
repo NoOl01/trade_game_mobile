@@ -48,7 +48,7 @@ fun AppNavigation(
         ) { stackEntry ->
             val userId = stackEntry.arguments?.getInt("userId")
             val userName = stackEntry.arguments?.getString("userName")
-            PrivateChatScreen(userId!!, userName!!, navController, isGestureNavigation)
+            PrivateChatScreen(userId!!, userName!!, isGestureNavigation)
         }
         composable(
             "StockScreen/{assetId}/{assetName}", arguments =
@@ -64,6 +64,6 @@ fun AppNavigation(
             val userId = stackEntry.arguments?.getInt("userId")
             ProfileScreen(userId!!, navController, isGestureNavigation)
         }
-        composable("SettingsScreen") { SettingsScreen(navController, isGestureNavigation) }
+        composable("SettingsScreen") { SettingsScreen(isGestureNavigation) }
     }
 }
