@@ -1,20 +1,24 @@
 package com.example.trade_game.domain.web_sockets
 
-import android.util.Log
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
+import org.json.JSONObject
 
 class WebSocketManager(private val url: String) {
     private val client = OkHttpClient()
     private var webSocket: WebSocket? = null
 
-    fun connect(onMessageReceived: (String) -> Unit){
-        val request = Request.Builder().url(url).build()
-        webSocket = client.newWebSocket(request, object : WebSocketListener(){
+    fun connect(accessToken: String?, onMessageReceived: (String) -> Unit){
+        val request = Request.Builder().url(url)
+        if (accessToken != null) {
+            request.addHeader("Authorization", "Bearer $accessToken")
+        }
+        val buildRequest = request.build()
+        webSocket = client.newWebSocket(buildRequest, object : WebSocketListener(){
 
             override fun onMessage(webSocket: WebSocket, text: String) {
                 onMessageReceived(text)
@@ -33,9 +37,12 @@ class WebSocketManager(private val url: String) {
         })
     }
 
-    fun sendMessage(recipientId: Long, message: String): Boolean{
-        val json = """{"recipient_id":$recipientId,"text":"$message"}"""
-        return webSocket?.send(json) ?: false
+    fun sendMessage(recipientId: Int, message: String): Boolean{
+        val messageToSend = JSONObject().apply {
+            put("recipient_id", recipientId)
+            put("text", message)
+        }.toString()
+        return webSocket!!.send(messageToSend)
     }
 
     fun disconnect(){

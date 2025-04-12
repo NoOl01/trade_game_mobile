@@ -40,7 +40,7 @@ fun MarketScreen(navController: NavController, isGestureNavigation: Boolean) {
     var loading by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        webSocketManager.connect { jsonMessage ->
+        webSocketManager.connect(null) { jsonMessage ->
             try {
                 val jsonObject = JSONObject(jsonMessage)
 

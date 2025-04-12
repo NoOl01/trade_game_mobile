@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.RetrofitInstance
+import com.example.trade_game.domain.models.ChatHistoryData
 import com.example.trade_game.domain.models.ChatHistoryResponse
 import com.example.trade_game.domain.models.ChatsResponse
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,6 +46,13 @@ class ChatViewModel : ViewModel() {
             } catch (ex: Exception) {
                 _chatHistory.value = ChatHistoryResponse("Error", emptyList(), ex.localizedMessage)
             }
+        }
+    }
+    fun addMessage(newMessage: ChatHistoryData) {
+        val currentState = _chatHistory.value
+        if (currentState != null) {
+            val updatedList = currentState.data + newMessage
+            _chatHistory.value = currentState.copy(data = updatedList)
         }
     }
 }
