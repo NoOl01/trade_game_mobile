@@ -24,6 +24,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -54,7 +55,6 @@ import com.example.trade_game.domain.BASE_URL
 import com.example.trade_game.domain.models.ChatHistoryData
 import com.example.trade_game.domain.view.ChatViewModel
 import com.example.trade_game.domain.web_sockets.WebSocketManager
-import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
@@ -109,7 +109,7 @@ fun PrivateChatScreen(
 
     Column(
         modifier = Modifier
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .padding(vertical = padding)
     ) {
@@ -117,7 +117,7 @@ fun PrivateChatScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(15.dp)
-                .background(Primary, shape = RoundedCornerShape(15.dp))
+                .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(15.dp))
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
@@ -125,7 +125,7 @@ fun PrivateChatScreen(
             Text(
                 text = userName,
                 fontSize = 24.sp,
-                color = Color.White
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
 
@@ -153,7 +153,7 @@ fun PrivateChatScreen(
             ) {
                 Text(
                     text = "Нет сообщений :(",
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -196,11 +196,11 @@ fun PrivateChatScreen(
                     }
                 ),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.Black,
-                    unfocusedTextColor = Color.Black,
-                    cursorColor = Primary,
-                    focusedBorderColor = Primary,
-                    unfocusedBorderColor = Primary,
+                    focusedTextColor = MaterialTheme.colorScheme.onBackground,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+                    cursorColor = MaterialTheme.colorScheme.primary,
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primary,
                 )
             )
 
@@ -224,12 +224,12 @@ fun PrivateChatScreen(
                 },
                 modifier = Modifier
                     .size(50.dp)
-                    .border(2.dp, Primary, shape = CircleShape)
+                    .border(2.dp, MaterialTheme.colorScheme.primary, shape = CircleShape)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.send),
                     contentDescription = "Отправить",
-                    tint = Primary,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .size(36.dp)
                         .graphicsLayer(
@@ -256,15 +256,15 @@ fun MessageItem(message: ChatHistoryData, selfId: Int) {
     {
         Column(
             modifier = Modifier
-                .background(Primary, shape = RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(10.dp))
                 .padding(10.dp)
                 .widthIn(min = 50.dp, max = 300.dp)
         ) {
-            Text(message.text, color = Color.White, fontSize = 18.sp)
+            Text(message.text, color = MaterialTheme.colorScheme.onPrimary, fontSize = 18.sp)
             Text(
                 text = formatTime(message.created_at),
                 textAlign = TextAlign.Right,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onPrimary,
                 fontSize = 14.sp
             )
         }

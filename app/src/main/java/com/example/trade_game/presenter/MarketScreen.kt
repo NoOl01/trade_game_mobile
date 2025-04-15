@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,7 +26,6 @@ import com.example.trade_game.domain.BASE_URL
 import com.example.trade_game.domain.models.WebSocketMarketResponse
 import com.example.trade_game.domain.web_sockets.WebSocketManager
 import com.example.trade_game.presenter.components.StockCard
-import com.example.trade_game.ui.theme.Primary
 import org.json.JSONObject
 
 @Composable
@@ -70,7 +70,7 @@ fun MarketScreen(navController: NavController, isGestureNavigation: Boolean) {
 
     Box(
         modifier = Modifier
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(top = 34.dp, bottom = padding)
             .fillMaxSize()
     ) {
@@ -80,7 +80,7 @@ fun MarketScreen(navController: NavController, isGestureNavigation: Boolean) {
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
-                    color = Primary
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
 

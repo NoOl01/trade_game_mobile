@@ -21,6 +21,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -51,7 +52,7 @@ import com.example.trade_game.common.NoScrollWebView
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.BASE_URL
 import com.example.trade_game.domain.view.MarketViewModel
-import com.example.trade_game.ui.theme.Primary
+import com.example.trade_game.domain.view.ThemeViewModel
 
 @SuppressLint("SetJavaScriptEnabled", "ClickableViewAccessibility")
 @Composable
@@ -60,7 +61,8 @@ fun StockScreen(
     assetName: String,
     navController: NavController,
     isGestureNavigation: Boolean,
-    viewModel: MarketViewModel = viewModel()
+    viewModel: MarketViewModel = viewModel(),
+    themeModel: ThemeViewModel = viewModel()
 ) {
     var amount by remember { mutableStateOf("1.00") }
     var error by remember { mutableStateOf("") }
@@ -72,6 +74,11 @@ fun StockScreen(
     val marketBuyData by viewModel.marketBuyData.collectAsState()
     val marketSellData by viewModel.marketSellData.collectAsState()
 
+    val isDark by themeModel.isDarkTheme.collectAsState()
+
+    LaunchedEffect(Unit) {
+        themeModel.loadTheme(context)
+    }
     LaunchedEffect(marketBuyData?.error) {
         if (marketBuyData?.error == "You don't have enough money") {
             error = "У вас недостаточно средств"
@@ -84,13 +91,14 @@ fun StockScreen(
         }
     }
 
-    val mUrl = "https://$BASE_URL/?asset_id=$assetId"
+    val mUrl = "https://$BASE_URL/?asset_id=$assetId&is_dark=$isDark"
+    println(mUrl)
     Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(vertical = ratingPadding)
             .padding(top = 34.dp)
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
@@ -106,7 +114,7 @@ fun StockScreen(
                     text = assetName,
                     fontSize = 30.sp,
                     fontFamily = Montserrat,
-                    color = Primary,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.align(Alignment.Center)
                 )
 
@@ -119,7 +127,7 @@ fun StockScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.cross),
                         contentDescription = "Закрыть",
-                        tint = Primary
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
             }
@@ -129,7 +137,7 @@ fun StockScreen(
                     .fillMaxWidth()
                     .height(500.dp)
                     .padding(horizontal = 20.dp, vertical = 10.dp)
-                    .border(1.dp, Color.Black, RoundedCornerShape(15.dp))
+                    .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(15.dp))
             ) {
                 AndroidView(
                     factory = {
@@ -182,7 +190,7 @@ fun StockScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     placeholder = { Text("Количество акций") },
                     shape = RoundedCornerShape(15.dp),
-                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = Primary, unfocusedBorderColor = Primary)
+                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary, unfocusedBorderColor = MaterialTheme.colorScheme.primary)
                 )
                 Spacer(Modifier.height(20.dp))
                 Row(
@@ -191,10 +199,10 @@ fun StockScreen(
                 ) {
                     OutlinedButton(
                         colors = ButtonColors(
-                            containerColor = Primary,
-                            contentColor = Color.White,
-                            disabledContainerColor = Primary,
-                            disabledContentColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            disabledContainerColor = MaterialTheme.colorScheme.primary,
+                            disabledContentColor = MaterialTheme.colorScheme.onPrimary
                         ),
                         onClick = {
                             viewModel.marketBuy(amount.toFloat(), assetId, preferencesManager)
@@ -210,10 +218,10 @@ fun StockScreen(
                     Spacer(Modifier.width(20.dp))
                     OutlinedButton(
                         colors = ButtonColors(
-                            containerColor = Primary,
-                            contentColor = Color.White,
-                            disabledContainerColor = Primary,
-                            disabledContentColor = Color.White
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                            disabledContainerColor = MaterialTheme.colorScheme.primary,
+                            disabledContentColor = MaterialTheme.colorScheme.onPrimary
                         ),
                         onClick = {
                             viewModel.marketSell(amount.toFloat(), assetId, preferencesManager)

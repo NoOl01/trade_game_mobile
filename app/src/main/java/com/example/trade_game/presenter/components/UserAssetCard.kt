@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -53,7 +54,7 @@ fun UserAssetCard(stock: UserAsset, navController: NavController) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Primary),
+                .background(MaterialTheme.colorScheme.primary),
             contentAlignment = Alignment.CenterStart
         ) {
             Row (
@@ -65,7 +66,7 @@ fun UserAssetCard(stock: UserAsset, navController: NavController) {
                         .fillMaxWidth(0.65f)
                         .fillMaxHeight()
                         .clip(RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp))
-                        .background(Color.White),
+                        .background(MaterialTheme.colorScheme.secondary),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Spacer(Modifier.width(6.dp))
@@ -75,7 +76,7 @@ fun UserAssetCard(stock: UserAsset, navController: NavController) {
                             .width(70.dp)
                             .height(40.dp)
                             .clip(RoundedCornerShape(15.dp))
-                            .background(Primary),
+                            .background(MaterialTheme.colorScheme.primary),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
@@ -84,20 +85,20 @@ fun UserAssetCard(stock: UserAsset, navController: NavController) {
                             textAlign = TextAlign.Center,
                             fontFamily = Montserrat,
                             fontSize = 14.sp,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                     Spacer(Modifier.width(10.dp))
                     Text(
                         text = stock.name,
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onSecondary,
                         fontFamily = Montserrat
                     )
                 }
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(Primary),
+                        .background(MaterialTheme.colorScheme.primary),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
@@ -110,7 +111,7 @@ fun UserAssetCard(stock: UserAsset, navController: NavController) {
                             fontSize = 20.sp,
                             modifier = Modifier.height(20.dp),
                             fontFamily = Montserrat,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }

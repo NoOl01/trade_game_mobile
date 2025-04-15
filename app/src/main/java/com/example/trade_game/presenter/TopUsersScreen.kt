@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,7 +39,6 @@ import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.RatingCard
 import com.example.trade_game.presenter.components.RatingUserCard
-import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 
@@ -66,7 +66,7 @@ fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, v
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
@@ -84,7 +84,7 @@ fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, v
                 ) {
                     Text(
                         text = "Рейтинг",
-                        color = Primary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontFamily = Montserrat,
                         fontWeight = FontWeight.Bold,
                         fontSize = 30.sp,
@@ -98,7 +98,7 @@ fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, v
                         Icon(
                             painter = painterResource(id = R.drawable.cross),
                             contentDescription = "Выйти",
-                            tint = Primary
+                            tint = MaterialTheme.colorScheme.primary
 
                         )
                     }

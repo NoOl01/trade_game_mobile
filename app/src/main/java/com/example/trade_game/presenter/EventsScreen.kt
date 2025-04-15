@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -31,19 +32,17 @@ import androidx.navigation.NavController
 import com.example.trade_game.common.formatDateTime
 import com.example.trade_game.domain.models.Event
 import com.example.trade_game.domain.view.EventsViewModel
-import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.launch
 
 @Composable
 fun EventsScreen(
-    navController: NavController,
     isGestureNavigation: Boolean,
     viewModel: EventsViewModel = viewModel()
 ) {
     val scope = rememberCoroutineScope()
     val events by viewModel.events.collectAsState()
 
-    val ratingPadding = if (isGestureNavigation) 60.dp else 90.dp
+    val ratingPadding = if (isGestureNavigation) 0.dp else 30.dp
 
     LaunchedEffect(Unit) {
         scope.launch {
@@ -54,15 +53,13 @@ fun EventsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .padding(vertical = ratingPadding)
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.TopCenter
     ) {
         when {
             events != null && events!!.data.isNotEmpty() -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .padding(top = 30.dp, bottom = ratingPadding)
-                ) {
+                LazyColumn {
                     items(events!!.data) { event ->
                         EventCard(event)
                     }
@@ -71,8 +68,8 @@ fun EventsScreen(
 
             events != null -> {
                 Box(
-                   modifier = Modifier.fillMaxSize(),
-                    contentAlignment= Alignment.Center
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
                     Card(
                         modifier = Modifier
@@ -85,7 +82,7 @@ fun EventsScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .background(Color.White),
+                                .background(MaterialTheme.colorScheme.background),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
@@ -94,7 +91,7 @@ fun EventsScreen(
                                 fontWeight = FontWeight.Bold,
                                 textAlign = TextAlign.Center,
                                 lineHeight = 35.sp,
-                                color = Primary
+                                color = MaterialTheme.colorScheme.primary
                             )
                         }
                     }
@@ -117,7 +114,7 @@ fun EventCard(event: Event) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.secondary),
             contentAlignment = Alignment.TopCenter
         ) {
             Column(
@@ -127,12 +124,12 @@ fun EventCard(event: Event) {
             ) {
                 Text(
                     text = event.title,
-                    color = Color(0xFF2A41DA),
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Spacer(modifier = Modifier.height(10.dp))
-                Text(text = event.description)
+                Text(text = event.description, color = MaterialTheme.colorScheme.onSecondary)
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     modifier = Modifier.fillMaxWidth(),

@@ -13,6 +13,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import com.example.trade_game.domain.view.UserViewModel
 
 @Composable
 fun BottomBar(navController: NavController, viewModel: UserViewModel = viewModel()) {
+
     Card (
         modifier = Modifier
             .fillMaxWidth()
@@ -40,7 +42,7 @@ fun BottomBar(navController: NavController, viewModel: UserViewModel = viewModel
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.Center
         ) {
             val navBackStackEntry: NavBackStackEntry? = navController.currentBackStackEntryAsState().value
@@ -50,7 +52,7 @@ fun BottomBar(navController: NavController, viewModel: UserViewModel = viewModel
                 modifier = Modifier
                     .fillMaxWidth(0.9f)
                     .clip(RoundedCornerShape(30.dp))
-                    .background(Color.White),
+                    .background(MaterialTheme.colorScheme.background),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
 
@@ -115,4 +117,3 @@ fun BottomBar(navController: NavController, viewModel: UserViewModel = viewModel
         }
     }
 }
-

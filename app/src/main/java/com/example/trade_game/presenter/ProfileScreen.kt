@@ -20,10 +20,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -43,7 +43,6 @@ import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.UserAssetCard
-import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -80,7 +79,7 @@ fun ProfileScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -99,7 +98,7 @@ fun ProfileScreen(
                     Icon(
                         painter = painterResource(id = R.drawable.cross),
                         contentDescription = "Выйти",
-                        tint = Primary
+                        tint = MaterialTheme.colorScheme.primary
                     )
                 }
                 Text(
@@ -107,7 +106,7 @@ fun ProfileScreen(
                     fontFamily = Montserrat,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Primary
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
             Row(
@@ -126,14 +125,14 @@ fun ProfileScreen(
                     Column {
                         Text(
                             text = userInfo?.data?.username ?: "Загрузка...",
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onBackground,
                             fontSize = 20.sp,
                             fontFamily = Montserrat,
                             fontWeight = FontWeight.Bold
                         )
                         Text(
                             text = "Место #${userPlace?.data?.place ?: "0"}",
-                            color = Primary,
+                            color = MaterialTheme.colorScheme.primary,
                             fontFamily = Montserrat,
                             fontSize = 14.sp,
                             modifier = Modifier
@@ -149,7 +148,7 @@ fun ProfileScreen(
                 if (userId != selfUserId) {
                     IconButton(
                         modifier = Modifier
-                            .background(color = Primary, shape = RoundedCornerShape(15.dp)),
+                            .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(15.dp)),
                         onClick = {
                             userInfo?.data?.let { user ->
                                 navController.navigate("Chat/${user.id}/${user.username}")
@@ -159,7 +158,7 @@ fun ProfileScreen(
                         Icon(
                             painter = painterResource(id = R.drawable.messages),
                             contentDescription = "Написать",
-                            tint = Color.White
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 }
@@ -183,7 +182,7 @@ fun ProfileScreen(
                             .fillMaxWidth(0.6f)
                             .fillMaxHeight()
                             .clip(RoundedCornerShape(topEnd = 15.dp))
-                            .background(Primary)
+                            .background(MaterialTheme.colorScheme.primary)
 
                     )
                     Box(
@@ -202,7 +201,7 @@ fun ProfileScreen(
                                 topEnd = 20.dp
                             )
                         )
-                        .background(Primary),
+                        .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
@@ -213,13 +212,13 @@ fun ProfileScreen(
                         Text(
                             text = "баланс пользователя",
                             fontFamily = Montserrat,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                         Text(
                             text = "$${userInfo?.data?.balance ?: "0"}",
                             fontFamily = Montserrat,
                             fontSize = 30.sp,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold
                         )
                     }

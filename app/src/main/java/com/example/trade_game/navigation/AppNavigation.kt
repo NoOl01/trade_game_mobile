@@ -34,7 +34,7 @@ fun AppNavigation(
         popEnterTransition = { fadeIn(animationSpec = tween(0)) },
         popExitTransition = { fadeOut(animationSpec = tween(0)) }) {
         composable("MainScreen") { MainView(navController, isGestureNavigation) }
-        composable("EventsScreen") { EventsScreen(navController, isGestureNavigation) }
+        composable("EventsScreen") { EventsScreen(isGestureNavigation) }
         composable("ChatsScreen") { ChatsScreen(navController, isGestureNavigation) }
         composable("MarketScreen") { MarketScreen(navController, isGestureNavigation) }
         composable("TopUsersScreen") { TopUsersScreen(navController, isGestureNavigation) }

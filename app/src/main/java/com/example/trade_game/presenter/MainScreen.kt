@@ -27,6 +27,7 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,7 +52,6 @@ import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.UserAssetCard
-import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -86,7 +86,7 @@ fun MainView(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(MaterialTheme.colorScheme.background),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -104,7 +104,7 @@ fun MainView(
                 Icon(
                     Icons.Default.Settings,
                     contentDescription = "Настройки",
-                    tint = Primary
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
             Row(
@@ -121,14 +121,14 @@ fun MainView(
                 Column {
                     Text(
                         text = userInfo?.data?.username ?: "Загрузка...",
-                        color = Color.Black,
+                        color = MaterialTheme.colorScheme.onBackground,
                         fontSize = 20.sp,
                         fontFamily = Montserrat,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
                         text = "Место #${userPlace?.data?.place ?: "0"}",
-                        color = Primary,
+                        color = MaterialTheme.colorScheme.primary,
                         fontFamily = Montserrat,
                         fontSize = 14.sp,
                         modifier = Modifier
@@ -160,7 +160,7 @@ fun MainView(
                             .fillMaxWidth(0.6f)
                             .fillMaxHeight()
                             .clip(RoundedCornerShape(topEnd = 15.dp))
-                            .background(Primary)
+                            .background(MaterialTheme.colorScheme.primary)
 
                     )
                     Box(
@@ -179,7 +179,7 @@ fun MainView(
                                 topEnd = 20.dp
                             )
                         )
-                        .background(Primary),
+                        .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(
@@ -190,13 +190,13 @@ fun MainView(
                         Text(
                             text = "ваш баланс",
                             fontFamily = Montserrat,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.onPrimary
                         )
                         Text(
                             text = "$${userInfo?.data?.balance ?: "0"}",
                             fontFamily = Montserrat,
                             fontSize = 30.sp,
-                            color = Color.White,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -227,12 +227,12 @@ fun MainView(
                                 .fillMaxWidth(0.8f)
                                 .height(200.dp),
                             colors = CardColors(
-                                containerColor = Color.White,
-                                contentColor = Primary,
-                                disabledContainerColor = Color.White,
-                                disabledContentColor = Primary
+                                containerColor = MaterialTheme.colorScheme.background,
+                                contentColor = MaterialTheme.colorScheme.primary,
+                                disabledContainerColor = MaterialTheme.colorScheme.background,
+                                disabledContentColor = MaterialTheme.colorScheme.primary
                             ),
-                            border = BorderStroke(2.dp, Primary)
+                            border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
                         ) {
                             Column(
                                 modifier = Modifier.fillMaxSize(),
@@ -249,9 +249,9 @@ fun MainView(
                                 ElevatedButton(
                                     colors = ButtonColors(
                                         containerColor = Color(0xFFE3E3E3),
-                                        contentColor = Primary,
+                                        contentColor = MaterialTheme.colorScheme.primary,
                                         disabledContainerColor = Color(0xFFE3E3E3),
-                                        disabledContentColor = Primary
+                                        disabledContentColor = MaterialTheme.colorScheme.primary
                                     ),
                                     onClick = { navController.navigate("MarketScreen") }
                                 ) {

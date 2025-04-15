@@ -20,6 +20,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -51,7 +52,6 @@ import com.example.trade_game.common.Montserrat
 import com.example.trade_game.common.isValidEmail
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.AuthViewModel
-import com.example.trade_game.ui.theme.Primary
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -81,7 +81,7 @@ fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = view
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Primary),
+            .background(MaterialTheme.colorScheme.primary),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -102,7 +102,7 @@ fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = view
                     modifier = Modifier
                         .height(40.dp)
                         .width(40.dp),
-                    tint = Color.White
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
                 Spacer(Modifier.width(10.dp))
                 Text(
@@ -110,13 +110,13 @@ fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = view
                     fontSize = 20.sp,
                     fontFamily = HeliosExtC,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
             Spacer(Modifier.height(40.dp))
             Column(
                 modifier = Modifier
-                    .background(Color.White, shape = RoundedCornerShape(topStart = 100.dp))
+                    .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(topStart = 100.dp))
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -277,9 +277,9 @@ fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = view
                 Button(
                     colors = ButtonColors(
                         containerColor = Color(0xFF2A41DA),
-                        contentColor = Color.White,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
                         disabledContainerColor = Color(0xFF2A41DA),
-                        disabledContentColor = Color.White
+                        disabledContentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -336,7 +336,7 @@ fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = view
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }

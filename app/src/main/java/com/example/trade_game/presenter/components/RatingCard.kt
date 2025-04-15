@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -29,7 +30,7 @@ import com.example.trade_game.ui.theme.Primary
 fun RatingCard(user: TopUser, index: Int, navController: NavController){
     val interactionSource = remember { MutableInteractionSource() }
     val ratingCardColor = when (index){
-        1 -> Primary
+        1 -> MaterialTheme.colorScheme.primary
         2 -> Color(0xFF4C68B4)
         3 -> Color(0xFF60709C)
         else -> Color(0xFF7F7F7F)
@@ -90,7 +91,7 @@ fun RatingUserCard(name: String, balance: String, place: Int){
             .fillMaxWidth()
             .padding(horizontal = 10.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Primary
+            containerColor = MaterialTheme.colorScheme.primary
         )
     ) {
         Row (

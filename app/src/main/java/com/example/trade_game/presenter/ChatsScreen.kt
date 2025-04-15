@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,10 +38,7 @@ import androidx.navigation.NavController
 import com.example.trade_game.R
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
-import com.example.trade_game.domain.BASE_URL
 import com.example.trade_game.domain.view.ChatViewModel
-import com.example.trade_game.domain.web_sockets.WebSocketManager
-import com.example.trade_game.ui.theme.Primary
 
 @Composable
 fun ChatsScreen(
@@ -61,7 +59,7 @@ fun ChatsScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
     ) {
         Column(
             modifier = Modifier
@@ -79,7 +77,7 @@ fun ChatsScreen(
                                     .padding(horizontal = 10.dp)
                                     .border(
                                         width = 2.dp,
-                                        color = Primary,
+                                        color = MaterialTheme.colorScheme.primary,
                                         shape = RoundedCornerShape(10.dp)
                                     )
                                     .padding(10.dp)
@@ -100,7 +98,7 @@ fun ChatsScreen(
                                     text = user.username,
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = Primary
+                                    color = MaterialTheme.colorScheme.primary
                                 )
                             }
                             Spacer(modifier = Modifier.height(20.dp))
