@@ -2,6 +2,8 @@ package com.example.trade_game.domain
 
 import com.example.trade_game.domain.models.AuthResponse
 import com.example.trade_game.domain.models.CancelOrderResponse
+import com.example.trade_game.domain.models.ChangePasswordRequest
+import com.example.trade_game.domain.models.ChangePasswordResponse
 import com.example.trade_game.domain.models.ChatHistoryResponse
 import com.example.trade_game.domain.models.ChatsResponse
 import com.example.trade_game.domain.models.CreateOrderResponse
@@ -14,6 +16,10 @@ import com.example.trade_game.domain.models.OrderDataRequest
 import com.example.trade_game.domain.models.OrderIdRequest
 import com.example.trade_game.domain.models.OrdersResponse
 import com.example.trade_game.domain.models.PriceHistoryResponse
+import com.example.trade_game.domain.models.RecoverCheckRequest
+import com.example.trade_game.domain.models.RecoverCheckResponse
+import com.example.trade_game.domain.models.RecoverSendRequest
+import com.example.trade_game.domain.models.RecoverSendResponse
 import com.example.trade_game.domain.models.RefreshRequest
 import com.example.trade_game.domain.models.RegisterRequest
 import com.example.trade_game.domain.models.TradeHistoryResponse
@@ -37,6 +43,18 @@ interface RetrofitApi {
 
     @POST("/api/v1/auth/refresh")
     suspend fun refresh(@Body refreshReq: RefreshRequest): AuthResponse
+
+    @POST("/api/v1/recover/send")
+    suspend fun recoverSend(@Body recoverReq: RecoverSendRequest): RecoverSendResponse
+
+    @POST("/api/v1/recover/check")
+    suspend fun recoverCheck(@Body recoverReq: RecoverCheckRequest): RecoverCheckResponse
+
+    @POST("/api/v1/change/password")
+    suspend fun changePassword(
+        @Body change: ChangePasswordRequest,
+        @Header("Authorization") token: String
+    ): ChangePasswordResponse
 
     @GET("/api/v1/events")
     suspend fun events(@Query("limit") limit: Int, @Query("offset") offset: Int?): EventsResponse
@@ -118,5 +136,10 @@ interface RetrofitApi {
     suspend fun getChatsList(@Header("Authorization") token: String): ChatsResponse
 
     @GET("/api/v1/chat/history/{user_id}")
-    suspend fun getChatHistory(@Header("Authorization") token: String, @Path("user_id") userId: Int, @Query("limit") limit: Int, @Query("before_message_id") messageId: Int?) : ChatHistoryResponse
+    suspend fun getChatHistory(
+        @Header("Authorization") token: String,
+        @Path("user_id") userId: Int,
+        @Query("limit") limit: Int,
+        @Query("before_message_id") messageId: Int?
+    ): ChatHistoryResponse
 }

@@ -18,12 +18,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,12 +31,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
@@ -48,24 +42,18 @@ import androidx.navigation.NavController
 import com.example.trade_game.R
 import com.example.trade_game.common.HeliosExtC
 import com.example.trade_game.common.Montserrat
-import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.AuthViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel()) {
+fun RecoverScreen(
+    navController: NavController,
+    viewModel: AuthViewModel = viewModel()
+) {
     val limit = 30
-    var name by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var popUpActive by remember { mutableStateOf(false) }
-    var passwordVisible by remember { mutableStateOf(false) }
-
-    val context = LocalContext.current
-    val preferencesManager = remember { PreferencesManager(context) }
     val scope = rememberCoroutineScope()
-
-    val result = viewModel.auth.collectAsState()
 
     Box(
         modifier = Modifier
@@ -105,13 +93,16 @@ fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel
             Spacer(Modifier.height(40.dp))
             Column(
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(topStart = 100.dp))
+                    .background(
+                        MaterialTheme.colorScheme.background,
+                        shape = RoundedCornerShape(topStart = 100.dp)
+                    )
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(Modifier.height(50.dp))
                 Text(
-                    text = "ВХОД",
+                    text = "ВОССТАНОВЛЕНИЕ",
                     color = Color(0xFF364CDF),
                     fontSize = 24.sp,
                     fontFamily = Montserrat,
@@ -129,17 +120,17 @@ fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel
                             .border(1.dp, Color(0xFF2A41DA), RoundedCornerShape(40.dp))
                             .padding(horizontal = 16.dp, vertical = 10.dp)
                     ) {
-                        if (name.isEmpty()) {
+                        if (email.isEmpty()) {
                             Text(
-                                text = "почта или логин",
+                                text = "почта",
                                 color = Color(0xB0364CDF),
                                 fontSize = 16.sp,
                                 fontFamily = Montserrat
                             )
                         }
                         BasicTextField(
-                            value = name,
-                            onValueChange = { name = it.take(limit) },
+                            value = email,
+                            onValueChange = { email = it.take(limit) },
                             textStyle = TextStyle(fontSize = 16.sp, color = Color(0xFF2A41DA)),
                             modifier = Modifier.fillMaxWidth(),
                             maxLines = 1,
@@ -147,47 +138,7 @@ fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel
                         )
                     }
                 }
-                Spacer(Modifier.height(10.dp))
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 26.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .height(40.dp)
-                            .border(1.dp, Color(0xFF2A41DA), RoundedCornerShape(40.dp))
-                            .padding(horizontal = 16.dp, vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(modifier = Modifier.weight(1f)) {
-                            if (password.isEmpty()) {
-                                Text(
-                                    text = "пароль",
-                                    color = Color(0xB0364CDF),
-                                    fontSize = 16.sp,
-                                    fontFamily = Montserrat
-                                )
-                            }
-                            BasicTextField(
-                                value = password,
-                                onValueChange = { password = it.take(limit) },
-                                textStyle = TextStyle(fontSize = 16.sp, color = Color(0xFF2A41DA)),
-                                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                                modifier = Modifier.fillMaxWidth(),
-                                maxLines = 1,
-                                singleLine = true
-                            )
-                        }
-                        IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                            Icon(
-                                painter = painterResource(if (passwordVisible) R.drawable.pass_on else R.drawable.pass_off),
-                                contentDescription = "Показать/скрыть пароль",
-                                tint = Color(0xFF2A41DA)
-                            )
-                        }
-                    }
-                }
+
                 Spacer(Modifier.height(50.dp))
                 Button(
                     colors = ButtonColors(
@@ -207,43 +158,15 @@ fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel
                         .clip(RoundedCornerShape(50)),
                     onClick = {
                         scope.launch {
-                            if (name.isNotEmpty() && password.isNotEmpty()) {
-                                viewModel.login(name, password, preferencesManager)
-                                val authResponse = result.value
-                                popUpActive = true
-                                delay(10000)
-                                if (authResponse != null && authResponse.status == "Ok") {
-                                    navController.navigate("MainScreen")
-                                } else {
-                                    popUpActive = false
-                                }
+                            if (email.isNotEmpty()) {
+                                viewModel.recoverSend(email, navController)
                             }
                         }
                     }
                 ) {
                     Text(
-                        text = "войти",
+                        text = "отправить",
                         fontSize = 20.sp,
-                        fontFamily = Montserrat
-                    )
-                }
-                TextButton(onClick = {
-                    navController.navigate("RegisterScreen")
-                }) {
-                    Text(
-                        text = "зарегистрироваться",
-                        fontSize = 18.sp,
-                        color = Color(0xFF2A41DA),
-                        fontFamily = Montserrat
-                    )
-                }
-                TextButton(onClick = {
-                    navController.navigate("RecoverScreen")
-                }) {
-                    Text(
-                        text = "забыли пароль ?",
-                        fontSize = 18.sp,
-                        color = Color(0xFF2A41DA),
                         fontFamily = Montserrat
                     )
                 }

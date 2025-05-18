@@ -322,6 +322,16 @@ fun RegisterScreen(navController: NavController, viewModel: AuthViewModel = view
                         fontFamily = Montserrat
                     )
                 }
+                TextButton(onClick = {
+                    navController.navigate("RecoverScreen")
+                }) {
+                    Text(
+                        text = "забыли пароль ?",
+                        fontSize = 18.sp,
+                        color = Color(0xFF2A41DA),
+                        fontFamily = Montserrat
+                    )
+                }
             }
         }
     }

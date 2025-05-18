@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.view.ViewGroup
 import android.webkit.WebViewClient
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -137,7 +136,6 @@ fun StockScreen(
                     .fillMaxWidth()
                     .height(500.dp)
                     .padding(horizontal = 20.dp, vertical = 10.dp)
-                    .border(1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(15.dp))
             ) {
                 AndroidView(
                     factory = {
@@ -165,7 +163,7 @@ fun StockScreen(
                 )
             }
             Spacer(Modifier.height(10.dp))
-            Column (
+            Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -190,7 +188,10 @@ fun StockScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     placeholder = { Text("Количество акций") },
                     shape = RoundedCornerShape(15.dp),
-                    colors = OutlinedTextFieldDefaults.colors(focusedBorderColor = MaterialTheme.colorScheme.primary, unfocusedBorderColor = MaterialTheme.colorScheme.primary)
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.primary
+                    )
                 )
                 Spacer(Modifier.height(20.dp))
                 Row(

@@ -9,6 +9,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.trade_game.presenter.OtpVerificationScreen
+import com.example.trade_game.presenter.ChangePasswordScreen
 import com.example.trade_game.presenter.ChatsScreen
 import com.example.trade_game.presenter.EventsScreen
 import com.example.trade_game.presenter.LoginView
@@ -19,6 +21,7 @@ import com.example.trade_game.presenter.RegisterScreen
 import com.example.trade_game.presenter.StockScreen
 import com.example.trade_game.presenter.TopUsersScreen
 import com.example.trade_game.presenter.ProfileScreen
+import com.example.trade_game.presenter.RecoverScreen
 import com.example.trade_game.presenter.SettingsScreen
 
 @Composable
@@ -52,18 +55,36 @@ fun AppNavigation(
         }
         composable(
             "StockScreen/{assetId}/{assetName}", arguments =
-            listOf(navArgument("assetId") { type = NavType.IntType },
-                navArgument("assetName") {type = NavType.StringType})) { stackEntry ->
+                listOf(
+                    navArgument("assetId") { type = NavType.IntType },
+                    navArgument("assetName") { type = NavType.StringType })
+        ) { stackEntry ->
             val assetId = stackEntry.arguments?.getInt("assetId")
             val assetName = stackEntry.arguments?.getString("assetName")
             StockScreen(assetId!!, assetName!!, navController, isGestureNavigation)
         }
         composable(
             "Profile/{userId}", arguments =
-            listOf(navArgument("userId") { type = NavType.IntType })) { stackEntry ->
+                listOf(navArgument("userId") { type = NavType.IntType })
+        ) { stackEntry ->
             val userId = stackEntry.arguments?.getInt("userId")
             ProfileScreen(userId!!, navController, isGestureNavigation)
         }
         composable("SettingsScreen") { SettingsScreen(isGestureNavigation) }
+        composable("RecoverScreen") { RecoverScreen(navController) }
+        composable(
+            "OtpVerificationScreen/{email}", arguments =
+                listOf(navArgument("email") { type = NavType.StringType })
+        ) { stackEntry ->
+            val email = stackEntry.arguments?.getString("email")
+            OtpVerificationScreen(email!!, navController)
+        }
+        composable(
+            "ChangePasswordScreen/{jwt}", arguments =
+                listOf(navArgument("jwt") { type = NavType.StringType })
+        ) { stackEntry ->
+            val jwt = stackEntry.arguments?.getString("jwt")
+            ChangePasswordScreen(jwt!!, navController)
+        }
     }
 }

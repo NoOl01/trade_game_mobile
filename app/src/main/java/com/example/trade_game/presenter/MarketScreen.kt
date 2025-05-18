@@ -1,6 +1,5 @@
 package com.example.trade_game.presenter
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.trade_game.domain.BASE_URL
@@ -60,10 +58,8 @@ fun MarketScreen(navController: NavController, isGestureNavigation: Boolean) {
 
                 stocks = stockList.sortedBy { it.id }
                 loading = false
-                Log.d("WebSocket", "Parsed stocks: $stocks")
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 error = true
-                Log.e("WebSocket", "Error parsing JSON", e)
             }
         }
     }

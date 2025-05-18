@@ -2,10 +2,14 @@ package com.example.trade_game.domain.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.RetrofitInstance
 import com.example.trade_game.domain.models.AuthResponse
+import com.example.trade_game.domain.models.ChangePasswordRequest
 import com.example.trade_game.domain.models.LoginRequest
+import com.example.trade_game.domain.models.RecoverCheckRequest
+import com.example.trade_game.domain.models.RecoverSendRequest
 import com.example.trade_game.domain.models.RefreshRequest
 import com.example.trade_game.domain.models.RegisterRequest
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -96,6 +100,53 @@ class AuthViewModel : ViewModel() {
             } else {
                 _auth.value = AuthResponse("Error", null, "error")
             }
+        }
+    }
+
+    fun recoverSend(email: String, navigation: NavController) {
+        try {
+            viewModelScope.launch {
+                val recover = RecoverSendRequest(email)
+                val response = RetrofitInstance.apiService.recoverSend(recover)
+                if (response.status == "Ok") {
+                    navigation.navigate("OtpVerificationScreen/$email")
+                }
+            }
+        } catch (_: Exception) {
+            return
+        }
+    }
+
+    fun recoverCheck(
+        email: String,
+        code: Int,
+        navigation: NavController
+    ) {
+        try {
+            viewModelScope.launch {
+                val recover = RecoverCheckRequest(email, code)
+                val response = RetrofitInstance.apiService.recoverCheck(recover)
+                if (response.status == "Ok") {
+                    val accessToken = response.data!!.access_token
+                    navigation.navigate("ChangePasswordScreen/$accessToken")
+                }
+            }
+        } catch (_: Exception) {
+            return
+        }
+    }
+
+    fun changePassword(password: String, jwt: String, navigation: NavController) {
+        try {
+            viewModelScope.launch {
+                val change = ChangePasswordRequest(password)
+                val response = RetrofitInstance.apiService.changePassword(change, jwt)
+                if (response.status == "Ok") {
+                    navigation.navigate("LoginScreen")
+                }
+            }
+        } catch (_: Exception) {
+            return
         }
     }
 }
