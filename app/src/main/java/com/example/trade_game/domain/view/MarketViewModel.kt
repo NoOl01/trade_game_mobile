@@ -1,6 +1,5 @@
 package com.example.trade_game.domain.view
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trade_game.data.PreferencesManager
@@ -11,7 +10,6 @@ import com.example.trade_game.domain.models.PriceHistoryResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MarketViewModel : ViewModel() {
@@ -27,14 +25,14 @@ class MarketViewModel : ViewModel() {
     fun marketSell(amount: Float, assetId: Int, preferencesManager: PreferencesManager) {
         viewModelScope.launch {
             try {
-                val token = preferencesManager.getUserData.first()?.get(3)
+                val token = preferencesManager.getUserData()
                 val newTrans = MarketTransactionRequest(
                     amount = amount,
                     asset_id = assetId
                 )
                 val response = RetrofitInstance.apiService.marketSell(
                     marketTransaction = newTrans,
-                    token = "Bearer $token"
+                    token = "Bearer ${token!!.accessToken}"
                 )
 
                 _marketSell.value = response
@@ -48,14 +46,14 @@ class MarketViewModel : ViewModel() {
     fun marketBuy(amount: Float, assetId: Int, preferencesManager: PreferencesManager) {
         viewModelScope.launch {
             try {
-                val token = preferencesManager.getUserData.first()?.get(3)
+                val token = preferencesManager.getUserData()
                 val newTrans = MarketTransactionRequest(
                     amount = amount,
                     asset_id = assetId
                 )
                 val response = RetrofitInstance.apiService.marketBuy(
                     marketTransaction = newTrans,
-                    token = "Bearer $token"
+                    token = "Bearer ${token!!.accessToken}"
                 )
                 _marketBuy.value = response
 

@@ -37,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -51,12 +50,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trade_game.R
 import com.example.trade_game.common.formatTime
 import com.example.trade_game.data.PreferencesManager
+import com.example.trade_game.data.UserData
 import com.example.trade_game.domain.BASE_URL
 import com.example.trade_game.domain.models.ChatHistoryData
 import com.example.trade_game.domain.view.ChatViewModel
 import com.example.trade_game.domain.web_sockets.WebSocketManager
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -78,16 +76,17 @@ fun PrivateChatScreen(
     val listState = rememberLazyListState()
     val webSocketManager = remember { WebSocketManager("wss://${BASE_URL}/api/v1/chat/private") }
     val keyboardController = LocalSoftwareKeyboardController.current
-    val selfUserId = runBlocking { preferencesManager.getUserData.first()?.get(0)!!.toInt() }
-    val accessToken = runBlocking { preferencesManager.getUserData.first()?.get(3)!! }
+    var user by remember { mutableStateOf<UserData?>(null) }
+
     LaunchedEffect(Unit) {
+        user = preferencesManager.getUserData()
         viewModel.getChatHistory(
             preferencesManager = preferencesManager,
             userId = userId,
             beforeMessageId = null,
             limit = 50
         )
-        webSocketManager.connect(accessToken) { jsonMessage ->
+        webSocketManager.connect(user!!.accessToken) { jsonMessage ->
             try {
                 val jsonObject = JSONObject(jsonMessage)
 
@@ -140,7 +139,7 @@ fun PrivateChatScreen(
                 reverseLayout = true
             ) {
                 items(messagesList!!.data.reversed()) { msg ->
-                    MessageItem(msg, selfUserId)
+                    MessageItem(msg, user!!.id)
                     Spacer(Modifier.height(6.dp))
                 }
             }
@@ -183,7 +182,7 @@ fun PrivateChatScreen(
                             viewModel.addMessage(
                                 ChatHistoryData(
                                     message_id = -1,
-                                    from_id = selfUserId,
+                                    from_id = user!!.id,
                                     recipient_id = userId,
                                     text = messageText,
                                     created_at = getCurrentTimestamp()
@@ -211,7 +210,7 @@ fun PrivateChatScreen(
                         viewModel.addMessage(
                             ChatHistoryData(
                                 message_id = if (messagesList?.data?.size != 0) messagesList?.data?.last()?.message_id?.plus(1) ?: 0 else 0,
-                                from_id = selfUserId,
+                                from_id = user!!.id,
                                 recipient_id = userId,
                                 text = messageText,
                                 created_at = getCurrentTimestamp()

@@ -2,7 +2,6 @@ package com.example.trade_game.domain.view
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.RetrofitInstance
 import com.example.trade_game.domain.models.ChatHistoryData
@@ -11,7 +10,6 @@ import com.example.trade_game.domain.models.ChatsResponse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class ChatViewModel : ViewModel() {
@@ -24,9 +22,9 @@ class ChatViewModel : ViewModel() {
     fun getChatsList(preferencesManager: PreferencesManager){
         viewModelScope.launch {
             try {
-                val token = preferencesManager.getUserData.first()?.get(3)
-                if (token!!.isNotBlank()) {
-                    val result = RetrofitInstance.apiService.getChatsList("Bearer $token")
+                val token = preferencesManager.getUserData()
+                if (token != null) {
+                    val result = RetrofitInstance.apiService.getChatsList("Bearer ${token.accessToken}")
                     _chatList.value = result
                 }
             } catch (ex: Exception) {
@@ -38,9 +36,9 @@ class ChatViewModel : ViewModel() {
     fun getChatHistory(preferencesManager: PreferencesManager, userId: Int, beforeMessageId: Int?, limit: Int){
         viewModelScope.launch {
             try {
-                val token = preferencesManager.getUserData.first()?.get(3)
-                if (token!!.isNotBlank()) {
-                    val result = RetrofitInstance.apiService.getChatHistory("Bearer $token", userId, limit, beforeMessageId)
+                val token = preferencesManager.getUserData()
+                if (token != null) {
+                    val result = RetrofitInstance.apiService.getChatHistory("Bearer ${token.accessToken}", userId, limit, beforeMessageId)
                     _chatHistory.value = result
                 }
             } catch (ex: Exception) {

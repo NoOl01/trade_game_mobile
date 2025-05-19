@@ -15,7 +15,6 @@ import com.example.trade_game.domain.models.RegisterRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class AuthViewModel : ViewModel() {
@@ -42,7 +41,7 @@ class AuthViewModel : ViewModel() {
                     )
                     _auth.value = response
                 } else {
-                    _auth.value = AuthResponse("error", null, "Invalid credentials")
+                    _auth.value = AuthResponse("Error", null, "Invalid credentials")
                 }
             } catch (ex: Exception) {
                 _auth.value = AuthResponse("Error", null, ex.localizedMessage)
@@ -55,7 +54,6 @@ class AuthViewModel : ViewModel() {
             try {
                 val newReg = LoginRequest(username, password)
                 val response = RetrofitInstance.apiService.login(newReg)
-
                 if (response.data != null && response.status == "Ok") {
                     preferencesManager.saveUserData(
                         response.data.user_id,
@@ -66,7 +64,7 @@ class AuthViewModel : ViewModel() {
                     )
                     _auth.value = response
                 } else {
-                    _auth.value = AuthResponse("error", null, "Invalid credentials")
+                    _auth.value = AuthResponse("Error", null, "Invalid credentials")
                 }
             } catch (ex: Exception) {
                 _auth.value = AuthResponse("Error", null, ex.localizedMessage)
@@ -85,9 +83,9 @@ class AuthViewModel : ViewModel() {
 
     fun refreshToken(preferencesManager: PreferencesManager) {
         viewModelScope.launch {
-            val token = preferencesManager.getUserData.first()?.get(4)
-            if (token!!.isNotBlank()) {
-                val result = refresh(token)
+            val token = preferencesManager.getUserData()
+            if (token != null) {
+                val result = refresh(token.refreshToken)
                 result.data?.let {
                     preferencesManager.saveUserData(
                         it.user_id,
@@ -98,7 +96,7 @@ class AuthViewModel : ViewModel() {
                     )
                 }
             } else {
-                _auth.value = AuthResponse("Error", null, "error")
+                _auth.value = AuthResponse("Error", null, "Error")
             }
         }
     }

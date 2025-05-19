@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+baldezh.jks
+/app/build
+/app/release

@@ -33,8 +33,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -50,11 +51,10 @@ import androidx.navigation.NavController
 import com.example.trade_game.R
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
+import com.example.trade_game.data.UserData
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.UserAssetCard
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 @Composable
 fun MainView(
@@ -65,21 +65,22 @@ fun MainView(
     val interactionSource = remember { MutableInteractionSource() }
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
-    val scope = rememberCoroutineScope()
     val userInfo by viewModel.userInfo.collectAsState()
     val userPlace by viewModel.userPlace.collectAsState()
     val userAssets by viewModel.usersAssets.collectAsState()
-
+    var user by remember { mutableStateOf<UserData?>(null) }
     val padding = if (isGestureNavigation) 0.dp else 70.dp
     LaunchedEffect(Unit) {
-        scope.launch {
-            viewModel.getUserInfo(preferencesManager.getUserData.first()?.get(0)!!.toInt())
-            viewModel.getUserAssets(preferencesManager.getUserData.first()?.get(0)!!.toInt())
-            viewModel.userInfo.collectLatest { userInfo ->
-                userInfo?.data?.id?.let { userId ->
-                    viewModel.getUserPlace(userId)
-                }
-            }
+        val loadedUser = preferencesManager.getUserData()
+        user = loadedUser
+
+        loadedUser?.let { u ->
+            viewModel.getUserInfo(u.id)
+            viewModel.getUserAssets(u.id)
+        }
+
+        viewModel.userInfo.collectLatest { info ->
+            info?.data?.id?.let { viewModel.getUserPlace(it) }
         }
     }
 
@@ -248,10 +249,10 @@ fun MainView(
                                 Spacer(Modifier.height(20.dp))
                                 ElevatedButton(
                                     colors = ButtonColors(
-                                        containerColor = Color(0xFFE3E3E3),
-                                        contentColor = MaterialTheme.colorScheme.primary,
-                                        disabledContainerColor = Color(0xFFE3E3E3),
-                                        disabledContentColor = MaterialTheme.colorScheme.primary
+                                        containerColor = MaterialTheme.colorScheme.primary,
+                                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                                        disabledContainerColor = MaterialTheme.colorScheme.primary,
+                                        disabledContentColor = MaterialTheme.colorScheme.onPrimary
                                     ),
                                     onClick = { navController.navigate("MarketScreen") }
                                 ) {

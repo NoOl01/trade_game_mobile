@@ -24,12 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.ThemeViewModel
 import kotlinx.coroutines.launch
@@ -38,6 +38,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SettingsScreen(
     isGestureNavigation: Boolean,
+    navController: NavController,
     viewModel: ThemeViewModel = viewModel()
 ) {
     val padding = if (isGestureNavigation) 0.dp else 50.dp
@@ -100,6 +101,9 @@ fun SettingsScreen(
             onClick = {
                 scope.launch {
                     preferencesManager.deleteUserData()
+                    navController.navigate("LoginScreen") {
+                        popUpTo(0)
+                    }
                 }
             }
         ) {

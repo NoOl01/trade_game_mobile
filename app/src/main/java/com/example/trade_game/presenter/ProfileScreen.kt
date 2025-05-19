@@ -26,7 +26,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,11 +43,10 @@ import androidx.navigation.NavController
 import com.example.trade_game.R
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
+import com.example.trade_game.data.UserData
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.UserAssetCard
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 
 @Composable
 fun ProfileScreen(
@@ -63,9 +64,10 @@ fun ProfileScreen(
 
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
-    val selfUserId = runBlocking { preferencesManager.getUserData.first()?.get(0)!!.toInt() }
+    var user by remember { mutableStateOf<UserData?>(null) }
 
     LaunchedEffect(Unit) {
+        user = preferencesManager.getUserData()
         viewModel.getUserInfo(userId)
         viewModel.getUserAssets(userId)
         viewModel.userInfo.collectLatest { userInfo ->
@@ -145,7 +147,7 @@ fun ProfileScreen(
                         )
                     }
                 }
-                if (userId != selfUserId) {
+                if (userId != user?.id) {
                     IconButton(
                         modifier = Modifier
                             .background(color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(15.dp)),

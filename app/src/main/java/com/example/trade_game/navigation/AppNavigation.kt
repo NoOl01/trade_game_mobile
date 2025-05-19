@@ -70,7 +70,7 @@ fun AppNavigation(
             val userId = stackEntry.arguments?.getInt("userId")
             ProfileScreen(userId!!, navController, isGestureNavigation)
         }
-        composable("SettingsScreen") { SettingsScreen(isGestureNavigation) }
+        composable("SettingsScreen") { SettingsScreen(isGestureNavigation, navController) }
         composable("RecoverScreen") { RecoverScreen(navController) }
         composable(
             "OtpVerificationScreen/{email}", arguments =

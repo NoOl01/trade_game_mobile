@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,10 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,11 +36,11 @@ import androidx.navigation.NavController
 import com.example.trade_game.R
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
+import com.example.trade_game.data.UserData
 import com.example.trade_game.domain.view.UserViewModel
 import com.example.trade_game.presenter.components.RatingCard
 import com.example.trade_game.presenter.components.RatingUserCard
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
 
 @Composable
 fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, viewModel: UserViewModel = viewModel()) {
@@ -53,9 +53,12 @@ fun TopUsersScreen(navController: NavController, isGestureNavigation: Boolean, v
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
 
+    var user by remember { mutableStateOf<UserData?>(null) }
+
     LaunchedEffect(Unit) {
+        user = preferencesManager.getUserData()
         viewModel.getUsersTop(100)
-        viewModel.getUserInfo(preferencesManager.getUserData.first()?.get(0)!!.toInt())
+        viewModel.getUserInfo(user!!.id)
         viewModel.userInfo.collectLatest { userInfo ->
             userInfo?.data?.id?.let { userId ->
                 viewModel.getUserPlace(userId)

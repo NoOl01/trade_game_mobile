@@ -23,11 +23,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,8 +50,6 @@ import com.example.trade_game.common.HeliosExtC
 import com.example.trade_game.common.Montserrat
 import com.example.trade_game.data.PreferencesManager
 import com.example.trade_game.domain.view.AuthViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel()) {
@@ -63,9 +61,15 @@ fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel
 
     val context = LocalContext.current
     val preferencesManager = remember { PreferencesManager(context) }
-    val scope = rememberCoroutineScope()
 
     val result = viewModel.auth.collectAsState()
+
+    LaunchedEffect(result.value) {
+        if (result.value?.status == "Ok") {
+            navController.navigate("MainScreen")
+            popUpActive = false
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -105,7 +109,10 @@ fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel
             Spacer(Modifier.height(40.dp))
             Column(
                 modifier = Modifier
-                    .background(MaterialTheme.colorScheme.background, shape = RoundedCornerShape(topStart = 100.dp))
+                    .background(
+                        MaterialTheme.colorScheme.background,
+                        shape = RoundedCornerShape(topStart = 100.dp)
+                    )
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -206,18 +213,10 @@ fun LoginView(navController: NavController, viewModel: AuthViewModel = viewModel
                         )
                         .clip(RoundedCornerShape(50)),
                     onClick = {
-                        scope.launch {
-                            if (name.isNotEmpty() && password.isNotEmpty()) {
-                                viewModel.login(name, password, preferencesManager)
-                                val authResponse = result.value
-                                popUpActive = true
-                                delay(10000)
-                                if (authResponse != null && authResponse.status == "Ok") {
-                                    navController.navigate("MainScreen")
-                                } else {
-                                    popUpActive = false
-                                }
-                            }
+                        if (name.isNotEmpty() && password.isNotEmpty()) {
+                            popUpActive = true
+                            viewModel.login(name, password, preferencesManager)
+
                         }
                     }
                 ) {
