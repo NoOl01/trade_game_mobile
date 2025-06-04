@@ -43,7 +43,6 @@ fun Trade_gameTheme(
             value = it
         }
     }
-    println(isDarkTheme)
 
     val colorScheme = if (isDarkTheme) DarkColorScheme else LightColorScheme
 

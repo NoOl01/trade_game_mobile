@@ -7,9 +7,12 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 import org.json.JSONObject
+import java.util.concurrent.TimeUnit
 
 class WebSocketManager(private val url: String) {
-    private val client = OkHttpClient()
+    private val client = OkHttpClient.Builder()
+        .pingInterval(10, TimeUnit.SECONDS)
+        .build()
     private var webSocket: WebSocket? = null
 
     fun connect(accessToken: String?, onMessageReceived: (String) -> Unit){

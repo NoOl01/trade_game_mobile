@@ -89,12 +89,11 @@ fun PrivateChatScreen(
         webSocketManager.connect(user!!.accessToken) { jsonMessage ->
             try {
                 val jsonObject = JSONObject(jsonMessage)
-
                 viewModel.addMessage(
                     ChatHistoryData(
                         message_id = jsonObject.getInt("message_id"),
                         from_id = jsonObject.getInt("from_id"),
-                        recipient_id = jsonObject.getInt("recipient_id"),
+                        recipient_id = userId,
                         text = jsonObject.getString("text"),
                         created_at = jsonObject.getString("created_at"),
                     )

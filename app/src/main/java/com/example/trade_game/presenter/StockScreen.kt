@@ -91,7 +91,6 @@ fun StockScreen(
     }
 
     val mUrl = "https://$BASE_URL/?asset_id=$assetId&is_dark=$isDark"
-    println(mUrl)
     Box(
         modifier = Modifier
             .fillMaxSize()
